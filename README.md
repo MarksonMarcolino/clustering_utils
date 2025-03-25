@@ -98,17 +98,17 @@ Then open `docs/build/html/index.html` in your browser.
 
 ## Dependencies
 
-- `scikit-learn`
-- `pandas`
-- `matplotlib`
-- `seaborn`
-- `umap-learn`
-- `hdbscan`
+[![scikit-learn](https://img.shields.io/pypi/v/scikit-learn.svg?label=scikit-learn&color=blue)](https://pypi.org/project/scikit-learn/)
+[![pandas](https://img.shields.io/pypi/v/pandas.svg?label=pandas&color=blue)](https://pypi.org/project/pandas/)
+[![matplotlib](https://img.shields.io/pypi/v/matplotlib.svg?label=matplotlib&color=blue)](https://pypi.org/project/matplotlib/)
+[![seaborn](https://img.shields.io/pypi/v/seaborn.svg?label=seaborn&color=blue)](https://pypi.org/project/seaborn/)
+[![umap-learn](https://img.shields.io/pypi/v/umap-learn.svg?label=umap-learn&color=blue)](https://pypi.org/project/umap-learn/)
+[![hdbscan](https://img.shields.io/pypi/v/hdbscan.svg?label=hdbscan&color=blue)](https://pypi.org/project/hdbscan/)
 
-For development and testing:
+## Development & Testing
 
-- `pytest`
-- `sphinx`
+[![pytest](https://img.shields.io/badge/tested%20with-pytest-0a0a0a?logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![sphinx](https://img.shields.io/badge/docs%20with-Sphinx-blue?logo=readthedocs&logoColor=white)](https://www.sphinx-doc.org/)
 
 ---
 
