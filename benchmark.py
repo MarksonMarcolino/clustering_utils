@@ -29,17 +29,53 @@ def run_full_benchmark(
     return_best=False
 ):
     """
-    Full clustering benchmark pipeline using configured algorithms and parameters.
-    Returns top N results and optionally the best model/labels.
+    Executes a full clustering benchmark pipeline using multiple algorithms and parameter configurations.
 
-    Parameters:
-    - X: DataFrame or np.array to cluster
-    - algorithms: list of algorithm names to include (optional)
-    - return_best: if True, returns (df_results, best_model, best_labels)
-    
-    Returns:
-    - DataFrame of top N results
-    - (optional) best model + labels
+    This function evaluates clustering performance (using silhouette score) across different algorithms
+    and hyperparameter combinations. It returns the top N performing models and, optionally, refits
+    and returns the best-performing model and its cluster labels.
+
+    Parameters
+    ----------
+    X : pd.DataFrame or np.ndarray
+        Input data to be clustered.
+
+    algorithms : list of str, optional
+        List of clustering algorithms to include. If None, uses all available:
+        ["KMeans", "Agglomerative", "Spectral", "Birch", "DBSCAN", "OPTICS", "MeanShift", "GMM", "HDBSCAN"]
+
+    cluster_range : range, optional
+        Range of cluster values to try for algorithms that support a `n_clusters` parameter.
+
+    spectral_affinities : list of str, optional
+        List of affinities to test for SpectralClustering (e.g., ["rbf", "nearest_neighbors"]).
+
+    dbscan_eps_values : list of float, optional
+        Epsilon values to evaluate for DBSCAN.
+
+    hdbscan_min_cluster_sizes : list of int, optional
+        Values to test for the `min_cluster_size` parameter in HDBSCAN.
+
+    verbose : bool, default=True
+        If True, prints progress and timing information during execution.
+
+    n_jobs : int or None, optional
+        Number of parallel threads to use. If None, uses all available cores.
+
+    top_n : int, default=5
+        Number of top-performing clustering results to return.
+
+    return_best : bool, default=False
+        If True, returns the best model and its predicted labels in addition to the results DataFrame.
+
+    Returns
+    -------
+    pd.DataFrame
+        Sorted DataFrame of clustering results with columns: 
+        ["Algorithm", "Params", "SilhouetteScore", "NumClusters", "ExecutionTime"]
+
+    tuple, optional
+        If `return_best=True`, also returns (best_model, best_labels)
     """
 
     if algorithms is None:
@@ -97,29 +133,36 @@ def build_search_space(
     hdbscan_min_cluster_sizes
 ):
     """
-    Constructs a list of (name, model, params) tuples to be used in benchmarking.
+    Constructs the search space for clustering benchmarking.
 
-    Parameters:
+    This function generates a list of algorithm configurations, each represented as a tuple
+    of (algorithm_name, model_instance, parameter_dict). It dynamically configures clustering
+    models such as KMeans, Spectral, DBSCAN, etc., based on the specified parameter ranges.
+
+    Parameters
     ----------
-    algorithms : list[str]
+    algorithms : list of str
         List of algorithm names to include.
+        Supported values: "KMeans", "Agglomerative", "Spectral", "Birch",
+        "DBSCAN", "OPTICS", "MeanShift", "GMM", "HDBSCAN"
 
     cluster_range : range
-        Range of cluster counts for cluster-based algorithms.
+        Range of cluster counts for algorithms that accept a `n_clusters` or similar parameter.
 
-    spectral_affinities : list[str]
-        Affinities to try for SpectralClustering.
+    spectral_affinities : list of str
+        Affinity strategies for SpectralClustering (e.g., "rbf", "nearest_neighbors").
 
-    dbscan_eps_values : list[float]
-        Epsilon values to test with DBSCAN.
+    dbscan_eps_values : list of float
+        Values of epsilon (`eps`) to use when configuring DBSCAN.
 
-    hdbscan_min_cluster_sizes : list[int]
-        Values for min_cluster_size to test with HDBSCAN.
+    hdbscan_min_cluster_sizes : list of int
+        Values for `min_cluster_size` used when configuring HDBSCAN.
 
-    Returns:
+    Returns
     -------
-    list[tuple]
-        List of (algorithm_name, model_instance, params_dict) for each config.
+    list of tuple
+        A list of (algorithm_name, model_instance, parameter_dict) tuples,
+        representing the full search space for benchmarking.
     """
     search_space = []
 
@@ -200,29 +243,40 @@ def build_search_space(
 
 def evaluate_model(X, name, model, params, verbose=True):
     """
-    Fits a clustering model, evaluates silhouette score, and times execution.
+    Fits a clustering model, evaluates its performance using silhouette score, and tracks execution time.
 
-    Parameters:
+    This function attempts to fit the provided model on the input data using either `fit_predict()` 
+    or `fit()` followed by `predict()`. It computes the silhouette score for the resulting cluster 
+    labels (if more than one cluster is found), and measures how long the operation took.
+
+    Parameters
     ----------
     X : pd.DataFrame or np.ndarray
-        Feature matrix to fit the model on.
+        The input feature matrix to cluster.
 
     name : str
-        Algorithm name (e.g., "KMeans", "DBSCAN", etc.)
+        The name of the clustering algorithm (e.g., "KMeans", "DBSCAN", "HDBSCAN").
 
-    model : sklearn or compatible estimator
-        A model instance with `fit_predict()` or `fit()` + `predict()` methods.
+    model : object
+        The clustering model instance. Must implement either `fit_predict()` or both `fit()` and `predict()` methods.
 
     params : dict
-        Parameters used to configure the model (for logging only).
+        Dictionary of parameters used to configure the model. Used for display and logging.
 
-    verbose : bool, optional
-        If True, prints progress and results.
+    verbose : bool, default=True
+        If True, prints progress messages, timing, and any errors encountered.
 
-    Returns:
+    Returns
     -------
     tuple
-        (AlgorithmName, Params, SilhouetteScore, NumClusters, ExecutionTime)
+        A tuple containing:
+        - algorithm name (str)
+        - parameters used (dict)
+        - silhouette score (float or None)
+        - number of clusters (int)
+        - execution time in seconds (float)
+
+        If the model fails or results in a single cluster, silhouette score is set to None or -1 respectively.
     """
     if verbose:
         print(f"Running {name} with {params}...")
@@ -260,47 +314,49 @@ def benchmark_clustering_algorithms(
     n_jobs=None
 ):
     """
-    Benchmarks a set of clustering algorithms across different configurations.
+    Benchmarks multiple clustering algorithms and hyperparameter configurations on a given dataset.
 
-    For each algorithm and parameter combination, it fits the model on the provided data,
-    computes silhouette score, and stores the number of clusters and execution time.
+    For each algorithm and parameter setting, this function fits the model, calculates the 
+    silhouette score (when more than one cluster is detected), counts the number of clusters,
+    and measures execution time. The benchmark is parallelized using multithreading.
 
-    Parameters:
+    Parameters
     ----------
     X : pd.DataFrame or np.ndarray
-        Scaled feature dataset to cluster.
+        Scaled feature matrix to cluster.
 
-    algorithms : list[str], optional
-        List of algorithm names to benchmark.
-        Options: "KMeans", "Agglomerative", "Spectral", "Birch", "DBSCAN", "OPTICS", "MeanShift", "GMM", "HDBSCAN"
+    algorithms : list of str, optional
+        Clustering algorithms to include in the benchmark.
+        Supported: "KMeans", "Agglomerative", "Spectral", "Birch", "DBSCAN",
+                   "OPTICS", "MeanShift", "GMM", "HDBSCAN"
 
     cluster_range : range, optional
-        Range of cluster counts to test for applicable models (e.g., KMeans, Agglomerative).
+        Range of cluster values to test (e.g., for KMeans, Agglomerative, Spectral, etc.).
 
-    spectral_affinities : list[str], optional
-        List of affinities for SpectralClustering ("rbf", "nearest_neighbors").
+    spectral_affinities : list of str, optional
+        List of affinity metrics for SpectralClustering. Default is ["rbf"].
 
-    dbscan_eps_values : list[float], optional
-        List of epsilon values to try for DBSCAN.
+    dbscan_eps_values : list of float, optional
+        List of epsilon values to evaluate for DBSCAN.
 
-    hdbscan_min_cluster_sizes : list[int], optional
+    hdbscan_min_cluster_sizes : list of int, optional
         List of min_cluster_size values to try for HDBSCAN.
 
-    verbose : bool, optional
-        If True, prints progress logs during benchmarking.
+    verbose : bool, default=True
+        If True, prints progress updates and logs model execution details.
 
     n_jobs : int or None, optional
-        Number of threads to use. If None, defaults to the number of CPUs.
+        Number of parallel threads to use. If None, defaults to the number of CPU cores.
 
-    Returns:
+    Returns
     -------
     pd.DataFrame
-        DataFrame containing:
-        - Algorithm
-        - Params
-        - SilhouetteScore
-        - NumClusters
-        - ExecutionTime
+        A DataFrame containing one row per configuration with the following columns:
+        - "Algorithm" : str
+        - "Params" : dict
+        - "SilhouetteScore" : float or None
+        - "NumClusters" : int
+        - "ExecutionTime" : float (seconds)
     """
     search_space = build_search_space(
         algorithms=algorithms,

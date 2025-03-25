@@ -14,19 +14,39 @@ def prepare_scaled_df(
     """
     Scales selected columns of a DataFrame using StandardScaler or MinMaxScaler.
 
-    Parameters:
-    - df (pd.DataFrame): Input DataFrame
-    - cols_to_scale (list[str], optional): Columns to scale. Defaults to all numeric.
-    - cols_to_keep (list[str], optional): Columns to leave unscaled.
-    - dropna (bool): Drop rows with NaNs AFTER scaling. Default is True.
-    - return_scaler (bool): Return the fitted scaler object.
-    - verbose (bool): Print which columns are being scaled.
-    - scaler_type (str): 'standard' or 'minmax'
-    - minmax_range (tuple): (min, max) range for MinMaxScaler.
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input DataFrame containing features to be scaled.
 
-    Returns:
-    - pd.DataFrame: Scaled DataFrame
-    - Scaler object (optional)
+    cols_to_scale : list of str, optional
+        List of column names to scale. If None, all numeric columns are scaled.
+
+    cols_to_keep : list of str, optional
+        Columns to keep unscaled. These will be concatenated to the scaled output.
+
+    dropna : bool, default=True
+        Whether to drop rows with NaN values after scaling.
+
+    return_scaler : bool, default=False
+        If True, returns the fitted scaler object alongside the scaled DataFrame.
+
+    verbose : bool, default=True
+        If True, prints which columns are being scaled.
+
+    scaler_type : {'standard', 'minmax'}, default='standard'
+        Type of scaler to apply: StandardScaler or MinMaxScaler.
+
+    minmax_range : tuple, default=(0, 1)
+        Value range for MinMaxScaler. Ignored if `scaler_type='standard'`.
+
+    Returns
+    -------
+    pd.DataFrame
+        The resulting DataFrame with scaled and kept columns.
+
+    sklearn.preprocessing.Scaler, optional
+        The fitted scaler object, if `return_scaler=True`.
     """
     df = df.copy()
 

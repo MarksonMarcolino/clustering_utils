@@ -230,7 +230,26 @@ def export_top_cluster_reports(
 
 def export_cluster_summary(df, labels_column, path):
     """
-    Saves mean and std of numeric features per cluster to CSV.
+    Computes and exports the mean and standard deviation of numeric features for each cluster.
+
+    This function groups the data by the cluster label column, calculates the mean and standard
+    deviation for all numeric columns (excluding the label column), and saves the results to a CSV file.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing numeric features and a column with cluster labels.
+
+    labels_column : str
+        Name of the column that contains cluster labels.
+
+    path : str
+        File path where the summary CSV file will be saved.
+
+    Returns
+    -------
+    None
+        The summary statistics are written to the specified file path.
     """
     numeric_cols = df.select_dtypes(include="number").columns.difference([labels_column])
     grouped = df.groupby(labels_column)[numeric_cols]
@@ -243,7 +262,26 @@ def export_cluster_summary(df, labels_column, path):
 
 def export_cluster_counts(df, labels_column, path):
     """
-    Saves cluster counts and proportions to CSV.
+    Computes and exports the count and proportion of samples in each cluster.
+
+    This function calculates how many samples belong to each cluster and what 
+    proportion of the total each cluster represents. The result is saved as a CSV.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing a column with cluster labels.
+
+    labels_column : str
+        Name of the column containing the cluster labels.
+
+    path : str
+        File path where the counts CSV file will be saved.
+
+    Returns
+    -------
+    None
+        The cluster count and proportion table is saved to the specified path.
     """
     counts = df[labels_column].value_counts().sort_index()
     proportions = (counts / len(df)).round(3)
@@ -254,7 +292,30 @@ def export_cluster_counts(df, labels_column, path):
 
 def export_pca_components(df, labels_column, path, n_components=2):
     """
-    Performs PCA on numeric features and saves components + cluster label.
+    Performs PCA on numeric features and exports the principal components with cluster labels.
+
+    This function reduces the dataset to the specified number of principal components,
+    preserving only numeric columns (excluding the label column), and appends the
+    cluster labels to the resulting components before saving to a CSV file.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing numeric features and cluster labels.
+
+    labels_column : str
+        Name of the column that contains cluster labels.
+
+    path : str
+        File path where the PCA component CSV file will be saved.
+
+    n_components : int, optional (default=2)
+        Number of principal components to compute.
+
+    Returns
+    -------
+    None
+        The PCA component table with cluster labels is saved to the specified path.
     """
     features = df.select_dtypes(include="number").drop(columns=[labels_column])
     pca = PCA(n_components=n_components)
@@ -267,7 +328,29 @@ def export_pca_components(df, labels_column, path, n_components=2):
 
 def export_cluster_centroids(model, feature_names, path):
     """
-    Saves cluster centroids to CSV. Assumes model has `.cluster_centers_`.
+    Extracts and exports cluster centroids from a clustering model to a CSV file.
+
+    This function checks whether the given model has a `cluster_centers_` attribute.
+    If available, it saves the centroids as a DataFrame using the provided feature names
+    as column headers and writes the result to the specified path.
+
+    Parameters
+    ----------
+    model : object
+        A fitted clustering model that exposes the `cluster_centers_` attribute 
+        (e.g., KMeans, Birch, or MeanShift).
+
+    feature_names : list of str
+        List of feature names to use as column headers for the centroid values.
+
+    path : str
+        File path where the centroid data will be saved as a CSV file.
+
+    Returns
+    -------
+    None
+        The centroids are saved to the specified file path. If the model does not
+        support centroids, a warning message is printed and nothing is saved.
     """
     if hasattr(model, "cluster_centers_"):
         df_centroids = pd.DataFrame(model.cluster_centers_, columns=feature_names)

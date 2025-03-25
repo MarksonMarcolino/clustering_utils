@@ -1,4 +1,4 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: clustering_utils
 Version: 0.1.0
 Summary: Modular clustering benchmark and visualization toolkit
@@ -16,3 +16,10 @@ Requires-Dist: matplotlib
 Requires-Dist: seaborn
 Requires-Dist: umap-learn
 Requires-Dist: hdbscan
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
