@@ -1,3 +1,17 @@
 # requirements-dev.txt
+
+# Testing
 pytest
+pytest-cov
+
+# Documentation
 sphinx
+furo 
+
+# Code style and linting
+flake8
+black
+isort
+
+# Type checking
+mypy
