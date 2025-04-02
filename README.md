@@ -12,6 +12,7 @@ This in-house Python package streamlines the process of scaling, benchmarking, e
 - **Benchmarking** for a variety of clustering algorithms:
   - `KMeans`, `Agglomerative`, `Spectral`, `DBSCAN`, `OPTICS`, `Birch`, `MeanShift`, `GMM`, `HDBSCAN`
 - **Automated ranking** by silhouette score  
+- **Permutation importance** using cross-validation with `RandomForestClassifier` or any scikit-learn compatible classifier
 - **Exportable reports**:
   - Cluster counts & proportions
   - Feature summary (mean & std per cluster)
@@ -49,6 +50,7 @@ from clustering_utils.scaling import prepare_scaled_df
 from clustering_utils.benchmark import run_full_benchmark
 from clustering_utils.reporting import export_top_cluster_reports
 from clustering_utils.visualization import generate_top_cluster_visuals
+from clustering_utils.importance import compute_permutation_importance, plot_importance_boxplot
 
 # Step 1: Scale
 df_scaled = prepare_scaled_df(df, cols_to_scale, cols_to_keep, scaler_type="minmax", minmax_range=(0, 5))
@@ -59,6 +61,10 @@ results = run_full_benchmark(df_scaled, top_n=5)
 # Step 3: Reports and Visualizations
 export_top_cluster_reports(df_scaled, results)
 generate_top_cluster_visuals(df_scaled, results)
+
+# Step 4: Permutation Importance
+importances_df = compute_permutation_importance(df_scaled, y, model=RandomForestClassifier())
+plot_importance_boxplot(importances_df)
 ```
 
 ---
@@ -69,6 +75,7 @@ generate_top_cluster_visuals(df_scaled, results)
 clustering_utils/
 ├── __init__.py
 ├── benchmark.py
+├── importance.py
 ├── reporting.py
 ├── scaling.py
 ├── visualization.py
@@ -78,7 +85,11 @@ docs/
 │   ├── index.rst
 │   └── ... auto-generated .rst files
 tests/
-├── test_functions.py
+├── test_benchmark.py
+├── test_reporting.py
+├── test_scaling.py
+├── test_visualization.py
+├── test_importance.py
 ```
 
 ---
@@ -104,6 +115,7 @@ Then open `docs/build/html/index.html` in your browser.
 [![seaborn](https://img.shields.io/pypi/v/seaborn.svg?label=seaborn&color=blue)](https://pypi.org/project/seaborn/)
 [![umap-learn](https://img.shields.io/pypi/v/umap-learn.svg?label=umap-learn&color=blue)](https://pypi.org/project/umap-learn/)
 [![hdbscan](https://img.shields.io/pypi/v/hdbscan.svg?label=hdbscan&color=blue)](https://pypi.org/project/hdbscan/)
+[![joblib](https://img.shields.io/pypi/v/joblib.svg?label=joblib&color=blue)](https://pypi.org/project/joblib/)
 
 ## Development & Testing
 
