@@ -209,6 +209,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="clustering_utils.benchmark.html">clustering_utils.benchmark module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clustering_utils.importance.html">clustering_utils.importance module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="clustering_utils.reporting.html">clustering_utils.reporting module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="clustering_utils.scaling.html">clustering_utils.scaling module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="clustering_utils.visualization.html">clustering_utils.visualization module</a></li>
@@ -258,12 +259,13 @@
 <span id="clustering-utils-package"></span><h1>clustering_utils package<a class="headerlink" href="#module-clustering_utils" title="Link to this heading">¶</a></h1>
 <p>clustering_utils</p>
 <p>This module exposes high-level functions for clustering analysis,
-including scaling, benchmarking, reporting, and visualization.</p>
+including scaling, benchmarking, reporting, visualization, and feature importance.</p>
 <p>Functions are organized across submodules:
 - <cite>scaling</cite>: preprocessing and feature normalization
 - <cite>benchmark</cite>: clustering algorithm evaluation and comparison
 - <cite>reporting</cite>: cluster statistics and CSV export
-- <cite>visualization</cite>: plots and projections for cluster insights</p>
+- <cite>visualization</cite>: plots and projections for cluster insights
+- <cite>importance</cite>: feature importance via permutation and RandomForest</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.benchmark_clustering_algorithms">
 <span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">benchmark_clustering_algorithms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['KMeans',</span> <span class="pre">'Agglomerative',</span> <span class="pre">'Spectral',</span> <span class="pre">'Birch',</span> <span class="pre">'DBSCAN',</span> <span class="pre">'OPTICS',</span> <span class="pre">'MeanShift',</span> <span class="pre">'GMM',</span> <span class="pre">'HDBSCAN']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">range(2,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_affinities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['rbf']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbscan_eps_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.3,</span> <span class="pre">0.5,</span> <span class="pre">0.7,</span> <span class="pre">1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdbscan_min_cluster_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[5,</span> <span class="pre">10]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.benchmark_clustering_algorithms" title="Link to this definition">¶</a></dt>
@@ -296,6 +298,71 @@ Supported: “KMeans”, “Agglomerative”, “Spectral”, “Birch”, “DB
 - “SilhouetteScore” : float or None
 - “NumClusters” : int
 - “ExecutionTime” : float (seconds)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="clustering_utils.compute_permutation_importance">
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">compute_permutation_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'accuracy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#clustering_utils.compute_permutation_importance" title="Link to this definition">¶</a></dt>
+<dd><p>Computes permutation importance using a specified classifier and returns importance distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – Feature matrix.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – Target labels (e.g., cluster assignments).</p></li>
+<li><p><strong>model</strong> (<em>sklearn estimator</em><em>, </em><em>optional</em>) – <p>The classification model to use. Must follow the scikit-learn API (i.e., implement <cite>fit</cite>, <cite>predict</cite>, etc).
+Defaults to <cite>RandomForestClassifier</cite>.</p>
+<p>You can pass any compatible classifier, such as:</p>
+<ul>
+<li><p><cite>RandomForestClassifier</cite></p></li>
+<li><p><cite>LogisticRegression</cite></p></li>
+<li><p><cite>GradientBoostingClassifier</cite></p></li>
+<li><p><cite>KNeighborsClassifier</cite></p></li>
+<li><p><cite>SVC</cite></p></li>
+<li><p><cite>DecisionTreeClassifier</cite></p></li>
+<li><p><cite>XGBClassifier</cite> (from xgboost)</p></li>
+<li><p><cite>CatBoostClassifier</cite> (from catboost)</p></li>
+<li><p><cite>LightGBM</cite> (from lightgbm)</p></li>
+</ul>
+<p>For a full list of classifiers, see:
+<a class="reference external" href="https://scikit-learn.org/stable/supervised_learning.html#supervised-learning">https://scikit-learn.org/stable/supervised_learning.html#supervised-learning</a></p>
+</p></li>
+<li><p><strong>n_repeats</strong> (<em>int</em>) – Number of shuffles for each feature.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em>) – Random seed.</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em>) – Number of CV folds to estimate variation in importance.</p></li>
+<li><p><strong>scoring</strong> (<em>str</em>) – <p>Metric used to evaluate model performance.</p>
+<p>You can use any classification metric supported by scikit-learn, such as:</p>
+<ul>
+<li><p>’accuracy’</p></li>
+<li><p>’balanced_accuracy’</p></li>
+<li><p>’f1’</p></li>
+<li><p>’f1_macro’</p></li>
+<li><p>’f1_micro’</p></li>
+<li><p>’f1_weighted’</p></li>
+<li><p>’precision’</p></li>
+<li><p>’precision_macro’</p></li>
+<li><p>’precision_micro’</p></li>
+<li><p>’precision_weighted’</p></li>
+<li><p>’recall’</p></li>
+<li><p>’recall_macro’</p></li>
+<li><p>’recall_micro’</p></li>
+<li><p>’recall_weighted’</p></li>
+<li><p>’roc_auc’</p></li>
+<li><p>’roc_auc_ovr’</p></li>
+<li><p>’roc_auc_ovo’</p></li>
+</ul>
+<p>For a full list of supported metrics, see:
+<a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter">https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter</a></p>
+</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em>) – Number of parallel jobs to run. Use -1 to use all processors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with permutation importances for each feature across CV folds.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
@@ -388,231 +455,200 @@ If None, uses the columns of <cite>X</cite>.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.generate_all_cluster_plots">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">generate_all_cluster_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsne_perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.generate_all_cluster_plots" title="Link to this definition">¶</a></dt>
-<dd><p>Generates and saves a full set of cluster visualizations for a given model and its labels.</p>
-<p>This function creates multiple visual representations of the clustering results, including:
-- PCA projection
-- t-SNE projections for each specified perplexity
-- UMAP projection
-- Silhouette plot
-- Cluster feature heatmap
-- Boxplot grid showing feature distributions by cluster
-- Elbow method plot (only illustrative; not used to fit model)</p>
-<p>All plots are saved as separate PNG files in the specified directory.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">generate_all_cluster_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsne_perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.generate_all_cluster_plots" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and save a complete set of visualizations for clustering results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – Input dataset with numeric features.</p></li>
-<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels assigned to each sample.</p></li>
-<li><p><strong>model_name</strong> (<em>str</em>) – Name of the clustering algorithm used (e.g., “KMeans”, “DBSCAN”).</p></li>
-<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters used to configure the model. Used for display or filenames.</p></li>
-<li><p><strong>save_dir</strong> (<em>str</em>) – Directory path where all plot images will be saved.</p></li>
-<li><p><strong>tsne_perplexities</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – List of perplexity values to use for t-SNE projections (default is [30]).</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Dataset with numeric features.</p></li>
+<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels.</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) – Name of the clustering algorithm.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Parameters of the clustering model.</p></li>
+<li><p><strong>save_dir</strong> (<em>str</em>) – Directory to save all plots.</p></li>
+<li><p><strong>tsne_perplexities</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Perplexity values for t-SNE. Default is [30].</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Saves multiple plot images to the specified directory.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.generate_top_cluster_visuals">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">generate_top_cluster_visuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'visuals'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsne_perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.generate_top_cluster_visuals" title="Link to this definition">¶</a></dt>
-<dd><p>Generates and saves visualizations for the top N clustering results from benchmarking.</p>
-<p>For each of the top N models (based on silhouette score), this function:
-- Rebuilds the clustering model using its parameters
-- Fits the model to the dataset
-- Assigns cluster labels
-- Creates and saves a set of plots to visualize clustering behavior</p>
-<p>The following plots are generated for each top model:
-- PCA projection
-- t-SNE projections (for each perplexity value)
-- UMAP projection
-- Silhouette plot
-- Cluster heatmap
-- Feature distribution boxplots
-- Elbow method (illustrative only)</p>
-<p>All visualizations are saved in a subfolder named after the model and parameters
-inside the provided output directory.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">generate_top_cluster_visuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'visuals'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsne_perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.generate_top_cluster_visuals" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and save visualizations for the top N clustering results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – The scaled dataset to be clustered and visualized.</p></li>
-<li><p><strong>df_results</strong> (<em>pd.DataFrame</em>) – Benchmarking results DataFrame containing columns: “Algorithm”, “Params”, etc.</p></li>
-<li><p><strong>top_n</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=5</em><em>)</em>) – Number of top-performing clustering configurations to visualize.</p></li>
-<li><p><strong>output_root</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;visuals&quot;</em><em>)</em>) – Root directory where visualization folders for each top model will be created.</p></li>
-<li><p><strong>tsne_perplexities</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – List of perplexity values to use for t-SNE plots (default is [30]).</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – The scaled dataset to be clustered.</p></li>
+<li><p><strong>df_results</strong> (<em>pandas.DataFrame</em>) – Benchmarking results containing “Algorithm” and “Params” columns.</p></li>
+<li><p><strong>top_n</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of top clustering results to visualize. Default is 5.</p></li>
+<li><p><strong>output_root</strong> (<em>str</em><em>, </em><em>optional</em>) – Root directory to store output folders. Default is “visuals”.</p></li>
+<li><p><strong>tsne_perplexities</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Perplexity values for t-SNE. Default is [30].</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Saves all generated visualizations to the specified output directory.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.plot_cluster_distribution">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_cluster_distribution" title="Link to this definition">¶</a></dt>
-<dd><p>Creates and saves a grid of boxplots showing the distribution of each feature by cluster.</p>
-<p>Each subplot represents one feature, with boxplots showing how its values are distributed
-across different clusters. This helps visualize how clusters differ in terms of individual variables.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_cluster_distribution" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and save a grid of boxplots showing the distribution of each feature by cluster.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – The input dataset containing numeric features.</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Input dataset with numeric features.</p></li>
 <li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels assigned to each data point.</p></li>
-<li><p><strong>save_path</strong> (<em>str</em>) – The file path where the combined boxplot image (PNG) will be saved.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – File path where the boxplot image will be saved.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The figure is saved to the specified path as a single PNG image.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.plot_cluster_heatmap">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_cluster_heatmap" title="Link to this definition">¶</a></dt>
-<dd><p>Generates and saves a heatmap of feature averages per cluster.</p>
-<p>The heatmap displays the mean value of each feature for each cluster,
-helping to visualize differences in cluster centroids across variables.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_cluster_heatmap" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and save a heatmap of feature averages per cluster.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – The input data used to compute cluster statistics.</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Input data to compute cluster statistics.</p></li>
 <li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels assigned to each sample.</p></li>
-<li><p><strong>save_path</strong> (<em>str</em>) – File path where the heatmap image (PNG) will be saved.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – File path to save the heatmap image.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The heatmap is saved to the specified path.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.plot_elbow_method">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_elbow_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_elbow_method" title="Link to this definition">¶</a></dt>
-<dd><p>Generates and saves an elbow plot to help determine the optimal number of clusters using KMeans.</p>
-<p>The elbow plot shows the inertia (sum of squared distances) for different values of K.
-The ‘elbow’ point on the curve typically indicates a good number of clusters.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_elbow_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_elbow_method" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and save an elbow plot to determine the optimal number of clusters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – The input dataset to cluster.</p></li>
-<li><p><strong>max_k</strong> (<em>int</em>) – The maximum number of clusters (K) to test. The function evaluates K from 1 to max_k.</p></li>
-<li><p><strong>save_path</strong> (<em>str</em>) – File path where the elbow plot (PNG) will be saved.</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Input dataset to cluster.</p></li>
+<li><p><strong>max_k</strong> (<em>int</em>) – Maximum number of clusters to test.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – File path to save the elbow plot image.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The plot is saved to the specified path.</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="clustering_utils.plot_importance_boxplot">
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_importance_boxplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importances_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'accuracy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_importance_boxplot" title="Link to this definition">¶</a></dt>
+<dd><p>Plots a boxplot of permutation importances for each feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>importances_df</strong> (<em>pd.DataFrame</em>) – Output from <cite>compute_permutation_importance</cite>.</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – Name of the metric column (used on x-axis).</p></li>
+<li><p><strong>top_n</strong> (<em>int</em>) – Number of top features to display based on importance median.</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em>) – Whether to sort features in ascending order (False = most important first).</p></li>
+<li><p><strong>model_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the model to display in the plot title (e.g., ‘RandomForest’).</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to save the plot. If None, the plot will be displayed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.plot_pca_projection">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_pca_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_pca_projection" title="Link to this definition">¶</a></dt>
-<dd><p>Plots a 2D PCA projection of high-dimensional data, colored by cluster labels.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_pca_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_pca_projection" title="Link to this definition">¶</a></dt>
+<dd><p>Plot a 2D PCA projection of high-dimensional data, colored by cluster labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – The input data to reduce using PCA.</p></li>
-<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels for each data point, used for coloring the points.</p></li>
-<li><p><strong>save_path</strong> (<em>str</em>) – The file path where the PNG image will be saved.</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Input data to reduce using PCA.</p></li>
+<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels for each data point.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – File path where the PCA image will be saved.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The plot is saved to the specified path and not displayed.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.plot_silhouette">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_silhouette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_silhouette" title="Link to this definition">¶</a></dt>
-<dd><p>Plots and saves the silhouette scores for each sample in the dataset.</p>
-<p>The silhouette plot helps visualize how well each data point fits within its cluster.
-Higher silhouette values indicate better cluster cohesion and separation.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_silhouette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_silhouette" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and save a silhouette score plot for each sample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – The input data used for clustering.</p></li>
-<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels assigned to each sample.</p></li>
-<li><p><strong>save_path</strong> (<em>str</em>) – File path where the silhouette plot image (PNG) will be saved.</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Data used for clustering.</p></li>
+<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels for each sample.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – File path to save the silhouette plot.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The silhouette plot is saved to the specified path.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.plot_tsne_projection">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_tsne_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_tsne_projection" title="Link to this definition">¶</a></dt>
-<dd><p>Generates and saves t-SNE projections for multiple perplexity values.</p>
-<p>For each specified perplexity value, the function computes a 2D t-SNE embedding
-of the input data and saves a PNG plot colored by cluster labels.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_tsne_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_tsne_projection" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and save t-SNE projections for multiple perplexity values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – The high-dimensional input data to reduce using t-SNE.</p></li>
-<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels for each data point, used to color the scatter plots.</p></li>
-<li><p><strong>save_dir</strong> (<em>str</em>) – Directory path where each t-SNE plot image will be saved.</p></li>
-<li><p><strong>perplexities</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – List of perplexity values to use for t-SNE (default is [30]).</p></li>
-<li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of iterations for t-SNE optimization (default is 1000).</p></li>
-<li><p><strong>learning_rate</strong> (<em>float</em><em>, </em><em>optional</em>) – Learning rate for t-SNE optimization (default is 200).</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – High-dimensional input data.</p></li>
+<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels for each data point.</p></li>
+<li><p><strong>save_dir</strong> (<em>str</em>) – Directory to save t-SNE plots.</p></li>
+<li><p><strong>perplexities</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – List of perplexity values. Default is [30].</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum iterations for t-SNE. Default is 1000.</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em><em>, </em><em>optional</em>) – Learning rate for t-SNE. Default is 200.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Each t-SNE projection is saved as a separate PNG file in the specified directory.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.plot_umap_projection">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_umap_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_umap_projection" title="Link to this definition">¶</a></dt>
-<dd><p>Generates and saves a 2D UMAP projection of the input data colored by cluster labels.</p>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.</span></span><span class="sig-name descname"><span class="pre">plot_umap_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.plot_umap_projection" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and save a 2D UMAP projection colored by cluster labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – The high-dimensional input data to reduce using UMAP.</p></li>
-<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels for each data point, used for coloring in the scatter plot.</p></li>
-<li><p><strong>save_path</strong> (<em>str</em>) – Path where the resulting UMAP PNG image will be saved.</p></li>
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Input data to reduce using UMAP.</p></li>
+<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels for each data point.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – File path to save UMAP plot.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The UMAP plot is saved to the specified file path.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -776,6 +812,7 @@ and returns the best-performing model and its cluster labels.</p>
             <ul>
 <li><a class="reference internal" href="#">clustering_utils package</a><ul>
 <li><a class="reference internal" href="#clustering_utils.benchmark_clustering_algorithms"><code class="docutils literal notranslate"><span class="pre">benchmark_clustering_algorithms()</span></code></a></li>
+<li><a class="reference internal" href="#clustering_utils.compute_permutation_importance"><code class="docutils literal notranslate"><span class="pre">compute_permutation_importance()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.export_single_cluster_report"><code class="docutils literal notranslate"><span class="pre">export_single_cluster_report()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.export_top_cluster_reports"><code class="docutils literal notranslate"><span class="pre">export_top_cluster_reports()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.generate_all_cluster_plots"><code class="docutils literal notranslate"><span class="pre">generate_all_cluster_plots()</span></code></a></li>
@@ -783,6 +820,7 @@ and returns the best-performing model and its cluster labels.</p>
 <li><a class="reference internal" href="#clustering_utils.plot_cluster_distribution"><code class="docutils literal notranslate"><span class="pre">plot_cluster_distribution()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.plot_cluster_heatmap"><code class="docutils literal notranslate"><span class="pre">plot_cluster_heatmap()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.plot_elbow_method"><code class="docutils literal notranslate"><span class="pre">plot_elbow_method()</span></code></a></li>
+<li><a class="reference internal" href="#clustering_utils.plot_importance_boxplot"><code class="docutils literal notranslate"><span class="pre">plot_importance_boxplot()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.plot_pca_projection"><code class="docutils literal notranslate"><span class="pre">plot_pca_projection()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.plot_silhouette"><code class="docutils literal notranslate"><span class="pre">plot_silhouette()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.plot_tsne_projection"><code class="docutils literal notranslate"><span class="pre">plot_tsne_projection()</span></code></a></li>

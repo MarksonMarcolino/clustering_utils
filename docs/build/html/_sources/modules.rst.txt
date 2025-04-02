@@ -6,6 +6,7 @@ clustering_utils
 
    clustering_utils
    clustering_utils.benchmark
+   clustering_utils.importance
    clustering_utils.reporting
    clustering_utils.scaling
    clustering_utils.visualization
