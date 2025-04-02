@@ -56,16 +56,19 @@ def prepare_scaled_df(
     if cols_to_scale is None:
         cols_to_scale = df.select_dtypes(include='number').columns.tolist()
 
-    all_used_cols = cols_to_scale + cols_to_keep
-    df = df[all_used_cols].copy()
-
+    # Remove duplicatas entre escala e preservação
     cols_to_scale = [col for col in cols_to_scale if col not in cols_to_keep]
 
     if verbose:
         print(f"[Scaling] Columns to scale: {cols_to_scale}")
+        print(f"[Scaling] Columns to keep: {cols_to_keep}")
         print(f"[Scaling] Using scaler: {scaler_type}")
 
-    # Choose scaler
+    # Constrói dataframe apenas com colunas únicas
+    all_used_cols = cols_to_scale + cols_to_keep
+    df = df[all_used_cols].copy()
+
+    # Escolhe o scaler
     if scaler_type == 'standard':
         scaler = StandardScaler()
     elif scaler_type == 'minmax':
@@ -73,11 +76,10 @@ def prepare_scaled_df(
     else:
         raise ValueError(f"Invalid scaler_type: '{scaler_type}'. Use 'standard' or 'minmax'.")
 
-    # Apply scaling
+    # Aplica o scaler nas colunas corretas
     df_scaled = df.copy()
     df_scaled[cols_to_scale] = scaler.fit_transform(df[cols_to_scale])
 
-    # Drop NA after scaling
     if dropna:
         df_scaled.dropna(inplace=True)
 

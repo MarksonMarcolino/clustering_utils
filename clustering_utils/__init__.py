@@ -2,13 +2,14 @@
 clustering_utils
 
 This module exposes high-level functions for clustering analysis,
-including scaling, benchmarking, reporting, and visualization.
+including scaling, benchmarking, reporting, visualization, and feature importance.
 
 Functions are organized across submodules:
 - `scaling`: preprocessing and feature normalization
 - `benchmark`: clustering algorithm evaluation and comparison
 - `reporting`: cluster statistics and CSV export
 - `visualization`: plots and projections for cluster insights
+- `importance`: feature importance via permutation and RandomForest
 """
 
 from .scaling import prepare_scaled_df
@@ -28,6 +29,10 @@ from .reporting import (
     export_top_cluster_reports,
     export_single_cluster_report
 )
+from .importance import (
+    compute_permutation_importance,
+    plot_importance_boxplot
+)
 
 __all__ = [
     "prepare_scaled_df",
@@ -43,5 +48,7 @@ __all__ = [
     "generate_all_cluster_plots",
     "generate_top_cluster_visuals",
     "export_top_cluster_reports",
-    "export_single_cluster_report"
+    "export_single_cluster_report",
+    "compute_permutation_importance",
+    "plot_importance_boxplot"
 ]
