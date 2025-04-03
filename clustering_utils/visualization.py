@@ -230,15 +230,7 @@ def plot_cluster_heatmap(X, labels, save_path, max_features=50, verbose=False):
     if verbose:
         print("[Heatmap] Generating cluster heatmap...")
 
-    if isinstance(X, np.ndarray):
-        X = pd.DataFrame(X, columns=[f"feature_{i}" for i in range(X.shape[1])])
-    elif not isinstance(X, pd.DataFrame):
-        raise TypeError("X must be a pandas DataFrame or numpy ndarray.")
-
-    if len(labels) != len(X):
-        raise ValueError("Length of labels does not match number of rows in X.")
-
-    df = X.copy()
+    df = pd.DataFrame(X)
     df["cluster"] = labels
     means = df.groupby("cluster").mean()
 
@@ -246,8 +238,13 @@ def plot_cluster_heatmap(X, labels, save_path, max_features=50, verbose=False):
         selected_cols = means.std().sort_values(ascending=False).head(max_features).index
         means = means[selected_cols]
 
-    plt.figure(figsize=(max(12, 0.4 * means.shape[1]), 6))
-    sns.heatmap(means, cmap="viridis", annot=True, fmt=".2f")
+    if means.empty or means.shape[1] == 0:
+        if verbose:
+            print("[Heatmap] Skipping: no valid features to plot.")
+        return
+
+    plt.figure(figsize=(10, 6))
+    sns.heatmap(means, cmap="viridis", annot=True, fmt=".2f", cbar=True)
     plt.title("Cluster Mean Feature Heatmap")
     plt.ylabel("Cluster")
     plt.tight_layout()
@@ -390,12 +387,10 @@ def generate_all_cluster_plots(X, labels, model_name, params, save_dir, tsne_per
         except Exception as e:
             print(f"[Viz] Error in {func.__name__}: {e}")
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        executor.submit(threaded_plot, plot_pca_projection, X, labels, os.path.join(save_dir, "pca_projection.png"))
-        executor.submit(threaded_plot, plot_silhouette, X, labels, os.path.join(save_dir, "silhouette_plot.png"))
-        executor.submit(threaded_plot, plot_cluster_heatmap, X, labels, os.path.join(save_dir, "cluster_heatmap.png"))
-        executor.submit(threaded_plot, plot_cluster_distribution, X, labels, os.path.join(save_dir, "cluster_distribution.png"))
-
+    plot_pca_projection(X, labels, os.path.join(save_dir, "pca_projection.png"), verbose=verbose)
+    plot_silhouette(X, labels, os.path.join(save_dir, "silhouette_plot.png"), verbose=verbose)
+    plot_cluster_heatmap(X, labels, os.path.join(save_dir, "cluster_heatmap.png"), verbose=verbose)
+    plot_cluster_distribution(X, labels, os.path.join(save_dir, "cluster_distribution.png"), verbose=verbose)
     if model_name == "KMeans":
         plot_elbow_method(X, max_k=10, save_path=os.path.join(save_dir, "elbow_method.png"), verbose=verbose)
 
