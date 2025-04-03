@@ -243,7 +243,13 @@ def plot_cluster_heatmap(X, labels, save_path, max_features=50, verbose=False):
             print("[Heatmap] Skipping: no valid features to plot.")
         return
 
-    plt.figure(figsize=(10, 6))
+    # Ajusta dinamicamente o tamanho da figura
+    n_features = means.shape[1]
+    n_clusters = means.shape[0]
+    fig_width = max(12, n_features * 0.5)  # largura proporcional às features
+    fig_height = max(6, n_clusters * 0.5)  # altura proporcional aos clusters
+
+    plt.figure(figsize=(fig_width, fig_height))
     sns.heatmap(means, cmap="viridis", annot=True, fmt=".2f", cbar=True)
     plt.title("Cluster Mean Feature Heatmap")
     plt.ylabel("Cluster")
