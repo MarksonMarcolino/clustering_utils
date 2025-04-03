@@ -19,10 +19,13 @@ def plot_pca_projection(X, labels, save_path, verbose=False):
     ----------
     X : pandas.DataFrame or numpy.ndarray
         Input data to reduce using PCA.
+
     labels : array-like
         Cluster labels for each data point.
+
     save_path : str
         File path where the PCA image will be saved.
+
     verbose : bool, optional
         If True, prints progress messages.
 
@@ -33,15 +36,31 @@ def plot_pca_projection(X, labels, save_path, verbose=False):
     if verbose:
         print("[PCA] Generating PCA projection...")
 
+    if isinstance(X, np.ndarray):
+        X = pd.DataFrame(X, columns=[f"feature_{i}" for i in range(X.shape[1])])
+    elif not isinstance(X, pd.DataFrame):
+        raise TypeError("X must be a pandas DataFrame or numpy ndarray.")
+
+    if len(labels) != len(X):
+        raise ValueError("Length of labels does not match number of samples in X.")
+
     pca = PCA(n_components=2)
     components = pca.fit_transform(X)
+
     plt.figure(figsize=(8, 6))
-    sns.scatterplot(x=components[:, 0], y=components[:, 1], hue=labels, palette='tab10', s=40)
+    sns.scatterplot(
+        x=components[:, 0],
+        y=components[:, 1],
+        hue=labels,
+        palette='tab10',
+        s=40,
+        legend="full" if len(np.unique(labels)) <= 20 else False
+    )
     plt.title("PCA Projection")
     plt.xlabel("PC1")
     plt.ylabel("PC2")
-    if len(np.unique(labels)) > 1:
-        plt.legend(title="Cluster")
+    if len(np.unique(labels)) <= 20:
+        plt.legend(title="Cluster", bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.tight_layout()
     plt.savefig(save_path)
     plt.close()
@@ -183,7 +202,7 @@ def plot_silhouette(X, labels, save_path, verbose=False):
 
 ...
 
-def plot_cluster_heatmap(X, labels, save_path, verbose=False):
+def plot_cluster_heatmap(X, labels, save_path, max_features=50, verbose=False):
     """
     Generate and save a heatmap of feature averages per cluster.
 
@@ -191,10 +210,16 @@ def plot_cluster_heatmap(X, labels, save_path, verbose=False):
     ----------
     X : pandas.DataFrame or numpy.ndarray
         Input data to compute cluster statistics.
+
     labels : array-like
         Cluster labels assigned to each sample.
+
     save_path : str
         File path to save the heatmap image.
+
+    max_features : int, optional
+        Maximum number of features to display. Default is 50.
+
     verbose : bool, optional
         If True, prints progress messages.
 
@@ -205,10 +230,23 @@ def plot_cluster_heatmap(X, labels, save_path, verbose=False):
     if verbose:
         print("[Heatmap] Generating cluster heatmap...")
 
-    df = pd.DataFrame(X)
+    if isinstance(X, np.ndarray):
+        X = pd.DataFrame(X, columns=[f"feature_{i}" for i in range(X.shape[1])])
+    elif not isinstance(X, pd.DataFrame):
+        raise TypeError("X must be a pandas DataFrame or numpy ndarray.")
+
+    if len(labels) != len(X):
+        raise ValueError("Length of labels does not match number of rows in X.")
+
+    df = X.copy()
     df["cluster"] = labels
     means = df.groupby("cluster").mean()
-    plt.figure(figsize=(10, 6))
+
+    if means.shape[1] > max_features:
+        selected_cols = means.std().sort_values(ascending=False).head(max_features).index
+        means = means[selected_cols]
+
+    plt.figure(figsize=(max(12, 0.4 * means.shape[1]), 6))
     sns.heatmap(means, cmap="viridis", annot=True, fmt=".2f")
     plt.title("Cluster Mean Feature Heatmap")
     plt.ylabel("Cluster")
