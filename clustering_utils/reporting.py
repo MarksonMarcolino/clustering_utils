@@ -293,7 +293,7 @@ def export_cluster_counts(df, labels_column, path):
 from sklearn.decomposition import PCA
 import pandas as pd
 
-def export_pca_variable_weights(df, labels_column, path, n_components=2):
+def export_pca_components(df, labels_column, path, n_components=2):
     """
     Exports the weights (loadings) of each variable in the first principal components of a PCA.
 
