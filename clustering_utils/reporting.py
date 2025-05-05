@@ -290,13 +290,12 @@ def export_cluster_counts(df, labels_column, path):
     print(f"✔ Cluster counts exported to {path}")
 
 
-def export_pca_components(df, labels_column, path, n_components=2):
-    """
-    Performs PCA on numeric features and exports the principal components with cluster labels.
+from sklearn.decomposition import PCA
+import pandas as pd
 
-    This function reduces the dataset to the specified number of principal components,
-    preserving only numeric columns (excluding the label column), and appends the
-    cluster labels to the resulting components before saving to a CSV file.
+def export_pca_variable_weights(df, labels_column, path, n_components=2):
+    """
+    Exports the weights (loadings) of each variable in the first principal components of a PCA.
 
     Parameters
     ----------
@@ -307,7 +306,7 @@ def export_pca_components(df, labels_column, path, n_components=2):
         Name of the column that contains cluster labels.
 
     path : str
-        File path where the PCA component CSV file will be saved.
+        File path where the PCA variable weights will be saved.
 
     n_components : int, optional (default=2)
         Number of principal components to compute.
@@ -315,16 +314,29 @@ def export_pca_components(df, labels_column, path, n_components=2):
     Returns
     -------
     None
-        The PCA component table with cluster labels is saved to the specified path.
+        The PCA loadings table is saved to the specified path.
     """
-    features = df.select_dtypes(include="number").drop(columns=[labels_column])
+    # Select only numeric columns and exclude the cluster label
+    numeric_df = df.select_dtypes(include="number")
+    if labels_column not in numeric_df.columns:
+        raise ValueError(f"The label column '{labels_column}' must be numeric and present in the dataframe.")
+    
+    features = numeric_df.drop(columns=[labels_column])
+    
+    # Fit PCA
     pca = PCA(n_components=n_components)
-    components = pca.fit_transform(features)
+    pca.fit(features)
 
-    df_pca = pd.DataFrame(components, columns=[f"PC{i+1}" for i in range(n_components)])
-    df_pca[labels_column] = df[labels_column].values
-    df_pca.to_csv(path, index=False)
-    print(f"✔ PCA components exported to {path}")
+    # Get loadings (components_.T are the weights of original variables in PCs)
+    loadings = pd.DataFrame(
+        pca.components_.T,
+        index=features.columns,
+        columns=[f"PC{i+1}" for i in range(n_components)]
+    )
+
+    # Save to CSV
+    loadings.to_csv(path)
+    print(f"✔ PCA variable weights exported to {path}")
 
 def export_cluster_centroids(model, feature_names, path):
     """
