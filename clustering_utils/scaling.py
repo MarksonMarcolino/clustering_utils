@@ -8,11 +8,11 @@ def prepare_scaled_df(
     dropna=True,
     return_scaler=False,
     verbose=True,
-    scaler_type='standard',  # 'standard' or 'minmax'
+    scaler_type='standard',  # 'standard', 'minmax' or 'zscore'
     minmax_range=(0, 1)       # only used if scaler_type is 'minmax'
 ):
     """
-    Scales selected columns of a DataFrame using StandardScaler or MinMaxScaler.
+    Scales selected columns of a DataFrame using StandardScaler, MinMaxScaler, or z-score.
 
     Parameters
     ----------
@@ -34,19 +34,19 @@ def prepare_scaled_df(
     verbose : bool, default=True
         If True, prints which columns are being scaled.
 
-    scaler_type : {'standard', 'minmax'}, default='standard'
-        Type of scaler to apply: StandardScaler or MinMaxScaler.
+    scaler_type : {'standard', 'minmax', 'zscore'}, default='standard'
+        Type of scaler to apply.
 
     minmax_range : tuple, default=(0, 1)
-        Value range for MinMaxScaler. Ignored if `scaler_type='standard'`.
+        Value range for MinMaxScaler. Ignored if `scaler_type` is not 'minmax'.
 
     Returns
     -------
     pd.DataFrame
         The resulting DataFrame with scaled and kept columns.
 
-    sklearn.preprocessing.Scaler, optional
-        The fitted scaler object, if `return_scaler=True`.
+    sklearn.preprocessing.Scaler or None
+        The fitted scaler object, if `return_scaler=True`. None if 'zscore' is used.
     """
     df = df.copy()
 
@@ -56,7 +56,6 @@ def prepare_scaled_df(
     if cols_to_scale is None:
         cols_to_scale = df.select_dtypes(include='number').columns.tolist()
 
-    # Remove duplicatas entre escala e preservação
     cols_to_scale = [col for col in cols_to_scale if col not in cols_to_keep]
 
     if verbose:
@@ -64,21 +63,22 @@ def prepare_scaled_df(
         print(f"[Scaling] Columns to keep: {cols_to_keep}")
         print(f"[Scaling] Using scaler: {scaler_type}")
 
-    # Constrói dataframe apenas com colunas únicas
     all_used_cols = cols_to_scale + cols_to_keep
     df = df[all_used_cols].copy()
 
-    # Escolhe o scaler
+    df_scaled = df.copy()
+
     if scaler_type == 'standard':
         scaler = StandardScaler()
+        df_scaled[cols_to_scale] = scaler.fit_transform(df[cols_to_scale])
     elif scaler_type == 'minmax':
         scaler = MinMaxScaler(feature_range=minmax_range)
+        df_scaled[cols_to_scale] = scaler.fit_transform(df[cols_to_scale])
+    elif scaler_type == 'zscore':
+        scaler = None
+        df_scaled[cols_to_scale] = (df[cols_to_scale] - df[cols_to_scale].mean()) / df[cols_to_scale].std()
     else:
-        raise ValueError(f"Invalid scaler_type: '{scaler_type}'. Use 'standard' or 'minmax'.")
-
-    # Aplica o scaler nas colunas corretas
-    df_scaled = df.copy()
-    df_scaled[cols_to_scale] = scaler.fit_transform(df[cols_to_scale])
+        raise ValueError(f"Invalid scaler_type: '{scaler_type}'. Use 'standard', 'minmax', or 'zscore'.")
 
     if dropna:
         df_scaled.dropna(inplace=True)
