@@ -456,7 +456,5 @@ def generate_top_cluster_visuals(X, df_results, top_n=5, output_root="visuals", 
 
         generate_all_cluster_plots(X, labels, model_name, model_params, output_folder, tsne_perplexities=tsne_perplexities, verbose=verbose)
 
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        futures = [executor.submit(process_visual, i, df_results.iloc[i]) for i in range(top_n)]
-        for future in as_completed(futures):
-            future.result()
+    for i in range(top_n):
+        process_visual(i, df_results.iloc[i])
