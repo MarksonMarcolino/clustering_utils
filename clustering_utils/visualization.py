@@ -362,7 +362,7 @@ def plot_cluster_radar(X, labels, save_path, max_features=8, verbose=False):
     Parameters
     ----------
     X : pandas.DataFrame
-        Normalized feature data.
+        Normalized feature data (e.g., Z-score, MinMax).
     labels : array-like
         Cluster labels.
     save_path : str
@@ -383,25 +383,48 @@ def plot_cluster_radar(X, labels, save_path, max_features=8, verbose=False):
     df["cluster"] = labels
     mean_profiles = df.groupby("cluster").mean()
 
-    # Select top features with highest variation across clusters
+    # Select features with highest variance across clusters
     top_features = mean_profiles.std().sort_values(ascending=False).head(max_features).index
     mean_profiles = mean_profiles[top_features]
 
     categories = list(mean_profiles.columns)
-    clusters = mean_profiles.index
-
     angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
     angles += angles[:1]  # complete the circle
 
-    plt.figure(figsize=(8, 8))
-    for idx, row in mean_profiles.iterrows():
+    # Color palette
+    colors = sns.color_palette("tab10", n_colors=len(mean_profiles))
+
+    plt.figure(figsize=(9, 9))
+    ax = plt.subplot(111, polar=True)
+
+    for idx, (cluster, row) in enumerate(mean_profiles.iterrows()):
         values = row.tolist()
         values += values[:1]
-        plt.polar(angles, values, label=f"Cluster {idx}")
+        ax.plot(angles, values, label=f"Cluster {cluster}", linewidth=2.5, color=colors[idx])
+        ax.fill(angles, values, alpha=0.1, color=colors[idx])
 
-    plt.xticks(angles[:-1], categories, rotation=45, ha='right')
-    plt.title("Radar Chart - Cluster Profiles")
-    plt.legend(loc='upper right', bbox_to_anchor=(1.2, 1.1))
+    # Category labels
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(categories, fontsize=10)
+
+    # Y-axis ticks (auto-scaled)
+    min_val = mean_profiles.min().min()
+    max_val = mean_profiles.max().max()
+    y_range = max(abs(min_val), abs(max_val))
+    ax.set_ylim(-y_range * 1.1, y_range * 1.1)
+
+    y_ticks = [-1, 0, 1] if min_val < 0 else [0, 0.5, 1.0]
+    ax.set_yticks(y_ticks)
+    ax.set_yticklabels([str(v) for v in y_ticks], color="gray", fontsize=9)
+
+    # Center line at 0 for z-score clarity
+    if min_val < 0:
+        ax.axhline(0, color='gray', linestyle='--', linewidth=1)
+
+    # Title and legend
+    ax.set_title("Radar Chart - Cluster Profiles", size=14, pad=20)
+    ax.legend(loc='upper right', bbox_to_anchor=(1.15, 1.1), frameon=False)
+
     plt.tight_layout()
     plt.savefig(save_path)
     plt.close()
