@@ -445,10 +445,19 @@ def plot_cluster_bar_compare(X, labels, key_var, save_path, top_n=10, verbose=Fa
 
     means = df.groupby("cluster")[top_features].mean().T
 
-    plt.figure(figsize=(12, top_n * 0.5 + 2))
-    means.plot(kind="barh")
-    plt.title(f"Cluster Comparison Based on Top Correlated Features with '{key_var}'")
-    plt.xlabel("Cluster Mean")
+    fig, ax = plt.subplots(figsize=(12, top_n * 0.6 + 2))
+    bars = means.plot(kind="barh", ax=ax, width=0.8)
+
+    # Invert Y-axis to show the most correlated features at the top
+    ax.invert_yaxis()
+
+    # Add numerical labels to each bar
+    for container in ax.containers:
+        ax.bar_label(container, fmt="%.2f", label_type="edge", padding=3)
+
+    ax.set_title(f"Cluster Comparison Based on Top Correlated Features with '{key_var}'")
+    ax.set_xlabel("Cluster Mean")
+    ax.legend(title="Cluster", bbox_to_anchor=(1.02, 1), loc="upper left", borderaxespad=0)
     plt.tight_layout()
     plt.savefig(save_path)
     plt.close()
