@@ -355,7 +355,114 @@ def plot_elbow_method(X, max_k, save_path, verbose=False):
     if verbose:
         print(f"[Elbow] Saved to {save_path}")
 
-def generate_all_cluster_plots(X, labels, model_name, params, save_dir, tsne_perplexities=[30], verbose=False):
+def plot_cluster_radar(X, labels, save_path, max_features=8, verbose=False):
+    """
+    Generate a radar chart to compare average cluster profiles.
+
+    Parameters
+    ----------
+    X : pandas.DataFrame
+        Normalized feature data.
+    labels : array-like
+        Cluster labels.
+    save_path : str
+        Path to save the radar chart.
+    max_features : int
+        Maximum number of features to display (with highest variance across clusters).
+    verbose : bool
+        If True, prints progress information.
+
+    Returns
+    -------
+    None
+    """
+    if verbose:
+        print("[Radar] Generating radar chart...")
+
+    df = pd.DataFrame(X).copy()
+    df["cluster"] = labels
+    mean_profiles = df.groupby("cluster").mean()
+
+    # Select top features with highest variation across clusters
+    top_features = mean_profiles.std().sort_values(ascending=False).head(max_features).index
+    mean_profiles = mean_profiles[top_features]
+
+    categories = list(mean_profiles.columns)
+    clusters = mean_profiles.index
+
+    angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
+    angles += angles[:1]  # complete the circle
+
+    plt.figure(figsize=(8, 8))
+    for idx, row in mean_profiles.iterrows():
+        values = row.tolist()
+        values += values[:1]
+        plt.polar(angles, values, label=f"Cluster {idx}")
+
+    plt.xticks(angles[:-1], categories, rotation=45, ha='right')
+    plt.title("Radar Chart - Cluster Profiles")
+    plt.legend(loc='upper right', bbox_to_anchor=(1.2, 1.1))
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.close()
+
+    if verbose:
+        print(f"[Radar] Saved to {save_path}")
+
+def plot_cluster_bar_compare(X, labels, key_var, save_path, top_n=10, verbose=False):
+    """
+    Plot a horizontal bar chart comparing clusters based on variables most correlated with a target variable.
+
+    Parameters
+    ----------
+    X : pandas.DataFrame
+        Normalized feature data.
+    labels : array-like
+        Cluster labels.
+    key_var : str
+        Name of the variable to use for correlation-based comparison.
+    save_path : str
+        Path to save the bar chart.
+    top_n : int
+        Number of most correlated variables to display.
+    verbose : bool
+        If True, prints progress information.
+
+    Returns
+    -------
+    None
+    """
+    if verbose:
+        print(f"[Bar] Comparing clusters based on '{key_var}' correlations...")
+
+    df = pd.DataFrame(X).copy()
+    if key_var not in df.columns:
+        raise ValueError(f"'{key_var}' is not in the dataframe columns.")
+
+    df["cluster"] = labels
+    correlations = df.corr()[key_var].drop("cluster").abs().sort_values(ascending=False)
+    top_features = correlations.head(top_n).index
+
+    means = df.groupby("cluster")[top_features].mean().T
+
+    plt.figure(figsize=(12, top_n * 0.5 + 2))
+    means.plot(kind="barh")
+    plt.title(f"Cluster Comparison Based on Top Correlated Features with '{key_var}'")
+    plt.xlabel("Cluster Mean")
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.close()
+
+    if verbose:
+        print(f"[Bar] Saved to {save_path}")
+
+
+def generate_all_cluster_plots(
+    X, labels, model_name, params, save_dir,
+    tsne_perplexities=[30], radar_max_features=8,
+    bar_compare_key_var="media_freq_media_valida_pct", bar_top_n=10,
+    verbose=False
+):
     """
     Generate and save a complete set of visualizations for clustering results.
 
@@ -373,6 +480,12 @@ def generate_all_cluster_plots(X, labels, model_name, params, save_dir, tsne_per
         Directory to save all plots.
     tsne_perplexities : list of int, optional
         Perplexity values for t-SNE. Default is [30].
+    radar_max_features : int, optional
+        Number of features to show in radar chart. Default is 8.
+    bar_compare_key_var : str, optional
+        Key variable to compute correlation for bar plot. Default is "TP_LOCALIZACAO".
+    bar_top_n : int, optional
+        Top correlated features to show in bar plot. Default is 10.
     verbose : bool, optional
         If True, prints progress messages.
 
@@ -393,17 +506,31 @@ def generate_all_cluster_plots(X, labels, model_name, params, save_dir, tsne_per
         except Exception as e:
             print(f"[Viz] Error in {func.__name__}: {e}")
 
+    # Standard visualizations
     plot_pca_projection(X, labels, os.path.join(save_dir, "pca_projection.png"), verbose=verbose)
     plot_silhouette(X, labels, os.path.join(save_dir, "silhouette_plot.png"), verbose=verbose)
     plot_cluster_heatmap(X, labels, os.path.join(save_dir, "cluster_heatmap.png"), verbose=verbose)
     plot_cluster_distribution(X, labels, os.path.join(save_dir, "cluster_distribution.png"), verbose=verbose)
     if model_name == "KMeans":
         plot_elbow_method(X, max_k=10, save_path=os.path.join(save_dir, "elbow_method.png"), verbose=verbose)
-
     plot_tsne_projection(X, labels, save_dir, perplexities=tsne_perplexities, verbose=verbose)
     plot_umap_projection(X, labels, os.path.join(save_dir, "umap_projection.png"), verbose=verbose)
 
-def generate_top_cluster_visuals(X, df_results, top_n=5, output_root="visuals", tsne_perplexities=[30], verbose=False):
+    # New visualizations
+    plot_cluster_radar(X, labels, os.path.join(save_dir, "radar_chart.png"), max_features=radar_max_features, verbose=verbose)
+    plot_cluster_bar_compare(X, labels, key_var=bar_compare_key_var, save_path=os.path.join(save_dir, "bar_compare.png"), top_n=bar_top_n, verbose=verbose)
+
+def generate_top_cluster_visuals(
+    X,
+    df_results,
+    top_n=5,
+    output_root="visuals",
+    tsne_perplexities=[30],
+    radar_max_features=8,
+    bar_compare_key_var="media_freq_media_valida_pct",
+    bar_top_n=10,
+    verbose=False
+):
     """
     Generate and save visualizations for the top N clustering results.
 
@@ -419,6 +546,12 @@ def generate_top_cluster_visuals(X, df_results, top_n=5, output_root="visuals", 
         Root directory to store output folders. Default is "visuals".
     tsne_perplexities : list of int, optional
         Perplexity values for t-SNE. Default is [30].
+    radar_max_features : int, optional
+        Number of features to display in radar chart. Default is 8.
+    bar_compare_key_var : str, optional
+        Variable name used for correlation in bar plot. Default is "TP_LOCALIZACAO".
+    bar_top_n : int, optional
+        Number of top correlated variables to show in bar plot. Default is 10.
     verbose : bool, optional
         If True, prints progress messages.
 
@@ -454,7 +587,14 @@ def generate_top_cluster_visuals(X, df_results, top_n=5, output_root="visuals", 
         param_str = "_".join([f"{k}={v}" for k, v in model_params.items()]) if model_params else "default"
         output_folder = os.path.join(output_root, f"{i+1}_{model_name}_{param_str}")
 
-        generate_all_cluster_plots(X, labels, model_name, model_params, output_folder, tsne_perplexities=tsne_perplexities, verbose=verbose)
+        generate_all_cluster_plots(
+            X, labels, model_name, model_params, output_folder,
+            tsne_perplexities=tsne_perplexities,
+            radar_max_features=radar_max_features,
+            bar_compare_key_var=bar_compare_key_var,
+            bar_top_n=bar_top_n,
+            verbose=verbose
+        )
 
     for i in range(top_n):
         process_visual(i, df_results.iloc[i])

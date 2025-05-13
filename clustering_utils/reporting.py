@@ -27,7 +27,7 @@ def export_single_cluster_report(
     - PCA-transformed components with cluster labels (saved as CSV)
     - Centroids (if the model supports them) (saved as CSV)
 
-    Parameters:
+    Parameters
     ----------
     X : pd.DataFrame
         Scaled dataset to be clustered.
@@ -50,7 +50,7 @@ def export_single_cluster_report(
         Names of features used in the dataset (for centroid reporting).
         If None, column names from `X` will be used.
 
-    Returns:
+    Returns
     -------
     None
         Saves CSV files to disk in a structured directory.
@@ -136,7 +136,7 @@ def export_top_cluster_reports(
 
     Each model's report is saved in a dedicated timestamped subfolder.
 
-    Parameters:
+    Parameters
     ----------
     X : pd.DataFrame
         Scaled dataset to be clustered.
@@ -157,7 +157,7 @@ def export_top_cluster_reports(
         List of feature names to include in the centroid exports.
         If None, uses the columns of `X`.
 
-    Returns:
+    Returns
     -------
     None
         Saves CSV files for each top model's clustering report into the output directory.
