@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="clustering_utils.importance module" href="clustering_utils.importance.html" /><link rel="prev" title="clustering_utils.scaling module" href="clustering_utils.scaling.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>clustering_utils.visualization module - clustering_utils 0.1.0 documentation</title>
+        <title>clustering_utils.visualization module - clustering_utils 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">clustering_utils 0.1.0 documentation</div></a>
+      <a href="index.html"><div class="brand">clustering_utils 0.2.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">clustering_utils 0.1.0 documentation</span>
+  <span class="sidebar-brand-text">clustering_utils 0.2.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -199,20 +199,9 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">clustering_utils</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of clustering_utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="clustering_utils.html">clustering_utils package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of clustering_utils package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="clustering_utils.benchmark.html">clustering_utils.benchmark module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="clustering_utils.reporting.html">clustering_utils.reporting module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="clustering_utils.scaling.html">clustering_utils.scaling module</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">clustering_utils.visualization module</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="clustering_utils.benchmark.html">clustering_utils.benchmark module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering_utils.importance.html">clustering_utils.importance module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering_utils.reporting.html">clustering_utils.reporting module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering_utils.scaling.html">clustering_utils.scaling module</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">clustering_utils.visualization module</a></li>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">clustering_utils</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of clustering_utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering_utils.html">clustering_utils package</a></li>
 </ul>
 </li>
 </ul>
@@ -259,7 +248,7 @@
 <span id="clustering-utils-visualization-module"></span><h1>clustering_utils.visualization module<a class="headerlink" href="#module-clustering_utils.visualization" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.generate_all_cluster_plots">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">generate_all_cluster_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsne_perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.generate_all_cluster_plots" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">generate_all_cluster_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsne_perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_max_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_compare_key_var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TP_LOCALIZACAO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#generate_all_cluster_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.generate_all_cluster_plots" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save a complete set of visualizations for clustering results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -270,6 +259,9 @@
 <li><p><strong>params</strong> (<em>dict</em>) – Parameters of the clustering model.</p></li>
 <li><p><strong>save_dir</strong> (<em>str</em>) – Directory to save all plots.</p></li>
 <li><p><strong>tsne_perplexities</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Perplexity values for t-SNE. Default is [30].</p></li>
+<li><p><strong>radar_max_features</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of features to show in radar chart. Default is 8.</p></li>
+<li><p><strong>bar_compare_key_var</strong> (<em>str</em><em>, </em><em>optional</em>) – Key variable to compute correlation for bar plot. Default is “TP_LOCALIZACAO”.</p></li>
+<li><p><strong>bar_top_n</strong> (<em>int</em><em>, </em><em>optional</em>) – Top correlated features to show in bar plot. Default is 10.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
@@ -281,7 +273,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.generate_top_cluster_visuals">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">generate_top_cluster_visuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'visuals'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsne_perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.generate_top_cluster_visuals" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">generate_top_cluster_visuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'visuals'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsne_perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_max_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_compare_key_var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TP_LOCALIZACAO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#generate_top_cluster_visuals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.generate_top_cluster_visuals" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save visualizations for the top N clustering results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -291,6 +283,9 @@
 <li><p><strong>top_n</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of top clustering results to visualize. Default is 5.</p></li>
 <li><p><strong>output_root</strong> (<em>str</em><em>, </em><em>optional</em>) – Root directory to store output folders. Default is “visuals”.</p></li>
 <li><p><strong>tsne_perplexities</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Perplexity values for t-SNE. Default is [30].</p></li>
+<li><p><strong>radar_max_features</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of features to display in radar chart. Default is 8.</p></li>
+<li><p><strong>bar_compare_key_var</strong> (<em>str</em><em>, </em><em>optional</em>) – Variable name used for correlation in bar plot. Default is “TP_LOCALIZACAO”.</p></li>
+<li><p><strong>bar_top_n</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of top correlated variables to show in bar plot. Default is 10.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
@@ -301,8 +296,29 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="clustering_utils.visualization.plot_cluster_bar_compare">
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_bar_compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_cluster_bar_compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_cluster_bar_compare" title="Link to this definition">¶</a></dt>
+<dd><p>Plot a horizontal bar chart comparing clusters based on variables most correlated with a target variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em>) – Normalized feature data.</p></li>
+<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels.</p></li>
+<li><p><strong>key_var</strong> (<em>str</em>) – Name of the variable to use for correlation-based comparison.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – Path to save the bar chart.</p></li>
+<li><p><strong>top_n</strong> (<em>int</em>) – Number of most correlated variables to display.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, prints progress information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.plot_cluster_distribution">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.plot_cluster_distribution" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_cluster_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_cluster_distribution" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save a grid of boxplots showing the distribution of each feature by cluster.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -321,7 +337,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.plot_cluster_heatmap">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.plot_cluster_heatmap" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_cluster_heatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_cluster_heatmap" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save a heatmap of feature averages per cluster.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -329,6 +345,7 @@
 <li><p><strong>X</strong> (<em>pandas.DataFrame</em><em> or </em><em>numpy.ndarray</em>) – Input data to compute cluster statistics.</p></li>
 <li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels assigned to each sample.</p></li>
 <li><p><strong>save_path</strong> (<em>str</em>) – File path to save the heatmap image.</p></li>
+<li><p><strong>max_features</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of features to display. Default is 50.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints progress messages.</p></li>
 </ul>
 </dd>
@@ -339,8 +356,28 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="clustering_utils.visualization.plot_cluster_radar">
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_radar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_cluster_radar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_cluster_radar" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a radar chart to compare average cluster profiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em>) – Normalized feature data.</p></li>
+<li><p><strong>labels</strong> (<em>array-like</em>) – Cluster labels.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – Path to save the radar chart.</p></li>
+<li><p><strong>max_features</strong> (<em>int</em>) – Maximum number of features to display (with highest variance across clusters).</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, prints progress information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.plot_elbow_method">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_elbow_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.plot_elbow_method" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_elbow_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_elbow_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_elbow_method" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save an elbow plot to determine the optimal number of clusters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -359,7 +396,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.plot_pca_projection">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_pca_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.plot_pca_projection" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_pca_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_pca_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_pca_projection" title="Link to this definition">¶</a></dt>
 <dd><p>Plot a 2D PCA projection of high-dimensional data, colored by cluster labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -378,7 +415,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.plot_silhouette">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_silhouette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.plot_silhouette" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_silhouette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_silhouette"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_silhouette" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save a silhouette score plot for each sample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -397,7 +434,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.plot_tsne_projection">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_tsne_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.plot_tsne_projection" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_tsne_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[30]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_tsne_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_tsne_projection" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save t-SNE projections for multiple perplexity values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -419,7 +456,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.visualization.plot_umap_projection">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_umap_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.visualization.plot_umap_projection" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_umap_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/visualization.html#plot_umap_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.visualization.plot_umap_projection" title="Link to this definition">¶</a></dt>
 <dd><p>Generate and save a 2D UMAP projection colored by cluster labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -443,26 +480,8 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="clustering_utils.importance.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">clustering_utils.importance module</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="clustering_utils.scaling.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">clustering_utils.scaling module</div>
-                
-              </div>
-            </a>
+          
+          
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -496,8 +515,10 @@
 <li><a class="reference internal" href="#">clustering_utils.visualization module</a><ul>
 <li><a class="reference internal" href="#clustering_utils.visualization.generate_all_cluster_plots"><code class="docutils literal notranslate"><span class="pre">generate_all_cluster_plots()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.visualization.generate_top_cluster_visuals"><code class="docutils literal notranslate"><span class="pre">generate_top_cluster_visuals()</span></code></a></li>
+<li><a class="reference internal" href="#clustering_utils.visualization.plot_cluster_bar_compare"><code class="docutils literal notranslate"><span class="pre">plot_cluster_bar_compare()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.visualization.plot_cluster_distribution"><code class="docutils literal notranslate"><span class="pre">plot_cluster_distribution()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.visualization.plot_cluster_heatmap"><code class="docutils literal notranslate"><span class="pre">plot_cluster_heatmap()</span></code></a></li>
+<li><a class="reference internal" href="#clustering_utils.visualization.plot_cluster_radar"><code class="docutils literal notranslate"><span class="pre">plot_cluster_radar()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.visualization.plot_elbow_method"><code class="docutils literal notranslate"><span class="pre">plot_elbow_method()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.visualization.plot_pca_projection"><code class="docutils literal notranslate"><span class="pre">plot_pca_projection()</span></code></a></li>
 <li><a class="reference internal" href="#clustering_utils.visualization.plot_silhouette"><code class="docutils literal notranslate"><span class="pre">plot_silhouette()</span></code></a></li>
@@ -514,7 +535,7 @@
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=01f34227"></script>
+</div><script src="_static/documentation_options.js?v=938c9ccc"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

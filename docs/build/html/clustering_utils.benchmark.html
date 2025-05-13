@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="clustering_utils.reporting module" href="clustering_utils.reporting.html" /><link rel="prev" title="clustering_utils package" href="clustering_utils.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>clustering_utils.benchmark module - clustering_utils 0.1.0 documentation</title>
+        <title>clustering_utils.benchmark module - clustering_utils 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">clustering_utils 0.1.0 documentation</div></a>
+      <a href="index.html"><div class="brand">clustering_utils 0.2.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -190,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">clustering_utils 0.1.0 documentation</span>
+  <span class="sidebar-brand-text">clustering_utils 0.2.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -199,20 +199,9 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">clustering_utils</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of clustering_utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="clustering_utils.html">clustering_utils package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of clustering_utils package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">clustering_utils.benchmark module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="clustering_utils.reporting.html">clustering_utils.reporting module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="clustering_utils.scaling.html">clustering_utils.scaling module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="clustering_utils.visualization.html">clustering_utils.visualization module</a></li>
-</ul>
-</li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">clustering_utils.benchmark module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering_utils.importance.html">clustering_utils.importance module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering_utils.reporting.html">clustering_utils.reporting module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering_utils.scaling.html">clustering_utils.scaling module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clustering_utils.visualization.html">clustering_utils.visualization module</a></li>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">clustering_utils</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of clustering_utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="clustering_utils.html">clustering_utils package</a></li>
 </ul>
 </li>
 </ul>
@@ -259,7 +248,7 @@
 <span id="clustering-utils-benchmark-module"></span><h1>clustering_utils.benchmark module<a class="headerlink" href="#module-clustering_utils.benchmark" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.benchmark.benchmark_clustering_algorithms">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">benchmark_clustering_algorithms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['KMeans',</span> <span class="pre">'Agglomerative',</span> <span class="pre">'Spectral',</span> <span class="pre">'Birch',</span> <span class="pre">'DBSCAN',</span> <span class="pre">'OPTICS',</span> <span class="pre">'MeanShift',</span> <span class="pre">'GMM',</span> <span class="pre">'HDBSCAN']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">range(2,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_affinities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['rbf']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbscan_eps_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.3,</span> <span class="pre">0.5,</span> <span class="pre">0.7,</span> <span class="pre">1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdbscan_min_cluster_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[5,</span> <span class="pre">10]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.benchmark.benchmark_clustering_algorithms" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">benchmark_clustering_algorithms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['KMeans',</span> <span class="pre">'Agglomerative',</span> <span class="pre">'Spectral',</span> <span class="pre">'Birch',</span> <span class="pre">'DBSCAN',</span> <span class="pre">'OPTICS',</span> <span class="pre">'MeanShift',</span> <span class="pre">'GMM',</span> <span class="pre">'HDBSCAN']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">range(2,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_affinities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['rbf']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbscan_eps_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.3,</span> <span class="pre">0.5,</span> <span class="pre">0.7,</span> <span class="pre">1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdbscan_min_cluster_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[5,</span> <span class="pre">10]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/benchmark.html#benchmark_clustering_algorithms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.benchmark.benchmark_clustering_algorithms" title="Link to this definition">¶</a></dt>
 <dd><p>Benchmarks multiple clustering algorithms and hyperparameter configurations on a given dataset.</p>
 <p>For each algorithm and parameter setting, this function fits the model, calculates the
 silhouette score (when more than one cluster is detected), counts the number of clusters,
@@ -298,7 +287,7 @@ Supported: “KMeans”, “Agglomerative”, “Spectral”, “Birch”, “DB
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.benchmark.build_search_space">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">build_search_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_affinities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbscan_eps_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdbscan_min_cluster_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.benchmark.build_search_space" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">build_search_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_affinities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbscan_eps_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdbscan_min_cluster_sizes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/benchmark.html#build_search_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.benchmark.build_search_space" title="Link to this definition">¶</a></dt>
 <dd><p>Constructs the search space for clustering benchmarking.</p>
 <p>This function generates a list of algorithm configurations, each represented as a tuple
 of (algorithm_name, model_instance, parameter_dict). It dynamically configures clustering
@@ -327,7 +316,7 @@ representing the full search space for benchmarking.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.benchmark.evaluate_model">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.benchmark.evaluate_model" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/benchmark.html#evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.benchmark.evaluate_model" title="Link to this definition">¶</a></dt>
 <dd><p>Fits a clustering model, evaluates its performance using silhouette score, and tracks execution time.</p>
 <p>This function attempts to fit the provided model on the input data using either <cite>fit_predict()</cite>
 or <cite>fit()</cite> followed by <cite>predict()</cite>. It computes the silhouette score for the resulting cluster
@@ -360,7 +349,7 @@ labels (if more than one cluster is found), and measures how long the operation 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clustering_utils.benchmark.run_full_benchmark">
-<span class="sig-prename descclassname"><span class="pre">clustering_utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">run_full_benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">range(2,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_affinities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbscan_eps_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdbscan_min_cluster_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_best</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clustering_utils.benchmark.run_full_benchmark" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">clustering_utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">run_full_benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">range(2,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_affinities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbscan_eps_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdbscan_min_cluster_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_best</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clustering_utils/benchmark.html#run_full_benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clustering_utils.benchmark.run_full_benchmark" title="Link to this definition">¶</a></dt>
 <dd><p>Executes a full clustering benchmark pipeline using multiple algorithms and parameter configurations.</p>
 <p>This function evaluates clustering performance (using silhouette score) across different algorithms
 and hyperparameter combinations. It returns the top N performing models and, optionally, refits
@@ -399,26 +388,8 @@ and returns the best-performing model and its cluster labels.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="clustering_utils.reporting.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">clustering_utils.reporting module</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="clustering_utils.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">clustering_utils package</div>
-                
-              </div>
-            </a>
+          
+          
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -465,7 +436,7 @@ and returns the best-performing model and its cluster labels.</p>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=01f34227"></script>
+</div><script src="_static/documentation_options.js?v=938c9ccc"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>
