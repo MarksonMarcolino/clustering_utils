@@ -137,7 +137,11 @@ def run_full_benchmark(
                 model.fit(X)
                 labels = model.predict(X)
             return top_results, model, labels
-
+    if return_best:
+        if verbose:
+            print("[Warning] Best model parameters not found in search space.")
+        return top_results, None, None
+        
     return top_results
 
 def build_search_space(
@@ -401,7 +405,8 @@ def benchmark_clustering_algorithms(
         spectral_affinities=spectral_affinities,
         dbscan_eps_values=dbscan_eps_values,
         dbscan_min_samples_values=dbscan_min_samples_values,
-        hdbscan_min_cluster_sizes=hdbscan_min_cluster_sizes
+        hdbscan_min_cluster_sizes=hdbscan_min_cluster_sizes,
+        is_distance_matrix=is_distance_matrix
     )
 
     results = []
