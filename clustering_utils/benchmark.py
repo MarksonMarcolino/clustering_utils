@@ -40,7 +40,7 @@ def run_full_benchmark(
     Parameters
     ----------
     X : pd.DataFrame or np.ndarray
-        Input data to be clustered.
+        Input data to be clustered. Can be a feature matrix or a precomputed distance matrix.
 
     algorithms : list of str, optional
         List of clustering algorithms to include. If None, uses all available:
@@ -73,6 +73,10 @@ def run_full_benchmark(
     return_best : bool, default=False
         If True, returns the best model and its predicted labels in addition to the results DataFrame.
 
+    is_distance_matrix : bool, default=False
+        If True, `X` is interpreted as a precomputed distance matrix.
+        DBSCAN will be configured with `metric='precomputed'`, and silhouette score will also use the precomputed mode.
+
     Returns
     -------
     pd.DataFrame
@@ -103,7 +107,8 @@ def run_full_benchmark(
         dbscan_min_samples_values=dbscan_min_samples_values,
         hdbscan_min_cluster_sizes=hdbscan_min_cluster_sizes,
         verbose=verbose,
-        n_jobs=n_jobs
+        n_jobs=n_jobs,
+        is_distance_matrix=is_distance_matrix
     )
 
     top_results = df_results.head(top_n)
@@ -121,7 +126,8 @@ def run_full_benchmark(
         spectral_affinities=spectral_affinities,
         dbscan_eps_values=dbscan_eps_values,
         dbscan_min_samples_values=dbscan_min_samples_values,
-        hdbscan_min_cluster_sizes=hdbscan_min_cluster_sizes
+        hdbscan_min_cluster_sizes=hdbscan_min_cluster_sizes,
+        is_distance_matrix=is_distance_matrix 
     )
     for name, model, params in search_space:
         if name == best_algo and params == best_params:
@@ -140,7 +146,8 @@ def build_search_space(
     spectral_affinities,
     dbscan_eps_values,
     dbscan_min_samples_values,
-    hdbscan_min_cluster_sizes
+    hdbscan_min_cluster_sizes,
+    is_distance_matrix=False
 ):
     """
     Constructs the search space for clustering benchmarking.
@@ -154,7 +161,7 @@ def build_search_space(
     algorithms : list of str
         List of algorithm names to include.
         Supported values: "KMeans", "Agglomerative", "Spectral", "Birch",
-        "DBSCAN", "OPTICS", "MeanShift", "GMM", "HDBSCAN"
+                          "DBSCAN", "OPTICS", "MeanShift", "GMM", "HDBSCAN"
 
     cluster_range : range
         Range of cluster counts for algorithms that accept a `n_clusters` or similar parameter.
@@ -170,6 +177,9 @@ def build_search_space(
 
     hdbscan_min_cluster_sizes : list of int
         Values for `min_cluster_size` used when configuring HDBSCAN.
+
+    is_distance_matrix : bool, default=False
+        If True, DBSCAN will be configured with `metric='precomputed'`.
 
     Returns
     -------
@@ -255,19 +265,7 @@ def build_search_space(
 
     return search_space
 
-
-def is_distance_matrix(X):
-    """
-    Detects if X is a square, symmetric matrix (likely a precomputed distance matrix).
-    """
-    return (
-        isinstance(X, np.ndarray) and 
-        X.ndim == 2 and 
-        X.shape[0] == X.shape[1] and 
-        np.allclose(X, X.T, atol=1e-8)
-    )
-
-def evaluate_model(X, name, model, params, verbose=True):
+def evaluate_model(X, name, model, params, verbose=True, is_distance_matrix=False):
     """
     Fits a clustering model, evaluates its performance using silhouette score, and tracks execution time.
 
@@ -288,6 +286,9 @@ def evaluate_model(X, name, model, params, verbose=True):
     verbose : bool
         Whether to print progress messages.
 
+    is_distance_matrix : bool, default=False
+        If True, X is treated as a precomputed distance matrix when computing silhouette score.
+
     Returns
     -------
     tuple
@@ -307,7 +308,7 @@ def evaluate_model(X, name, model, params, verbose=True):
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
 
         if n_clusters > 1:
-            metric = 'precomputed' if is_distance_matrix(X) else 'euclidean'
+            metric = 'precomputed' if is_distance_matrix else 'euclidean'
             try:
                 score = silhouette_score(X, labels, metric=metric)
             except Exception as e:
@@ -352,7 +353,7 @@ def benchmark_clustering_algorithms(
     Parameters
     ----------
     X : pd.DataFrame or np.ndarray
-        Scaled feature matrix to cluster.
+        Scaled feature matrix or precomputed distance matrix to cluster.
 
     algorithms : list of str, optional
         Clustering algorithms to include in the benchmark.
@@ -380,6 +381,10 @@ def benchmark_clustering_algorithms(
     n_jobs : int or None, optional
         Number of parallel threads to use. If None, defaults to the number of CPU cores.
 
+    is_distance_matrix : bool, default=False
+        If True, indicates that `X` is a precomputed distance matrix.
+        DBSCAN will be configured with `metric='precomputed'`, and silhouette score will also use the precomputed metric.
+
     Returns
     -------
     pd.DataFrame
@@ -402,7 +407,7 @@ def benchmark_clustering_algorithms(
     results = []
     with ThreadPoolExecutor(max_workers=n_jobs) as executor:
         futures = [
-            executor.submit(evaluate_model, X, name, model, params, verbose)
+            executor.submit(evaluate_model, X, name, model, params, verbose, is_distance_matrix)
             for name, model, params in search_space
         ]
         for future in as_completed(futures):
