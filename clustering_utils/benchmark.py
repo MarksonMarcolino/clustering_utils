@@ -22,6 +22,7 @@ def run_full_benchmark(
     cluster_range=range(2, 10),
     spectral_affinities=None,
     dbscan_eps_values=None,
+    dbscan_min_samples_values=None,
     hdbscan_min_cluster_sizes=None,
     verbose=True,
     n_jobs=None,
@@ -52,6 +53,9 @@ def run_full_benchmark(
 
     dbscan_eps_values : list of float, optional
         Epsilon values to evaluate for DBSCAN.
+
+    dbscan_min_samples_values : list of int, optional
+        Values for the `min_samples` parameter in DBSCAN. Default is [5].
 
     hdbscan_min_cluster_sizes : list of int, optional
         Values to test for the `min_cluster_size` parameter in HDBSCAN.
@@ -84,6 +88,8 @@ def run_full_benchmark(
         spectral_affinities = ["rbf"]
     if dbscan_eps_values is None:
         dbscan_eps_values = [0.3, 0.5, 0.7, 1.0]
+    if dbscan_min_samples_values is None:
+        dbscan_min_samples_values = [5]
     if hdbscan_min_cluster_sizes is None:
         hdbscan_min_cluster_sizes = [5, 10]
 
@@ -93,6 +99,7 @@ def run_full_benchmark(
         cluster_range=cluster_range,
         spectral_affinities=spectral_affinities,
         dbscan_eps_values=dbscan_eps_values,
+        dbscan_min_samples_values=dbscan_min_samples_values,
         hdbscan_min_cluster_sizes=hdbscan_min_cluster_sizes,
         verbose=verbose,
         n_jobs=n_jobs
@@ -112,6 +119,7 @@ def run_full_benchmark(
         cluster_range=cluster_range,
         spectral_affinities=spectral_affinities,
         dbscan_eps_values=dbscan_eps_values,
+        dbscan_min_samples_values=dbscan_min_samples_values,
         hdbscan_min_cluster_sizes=hdbscan_min_cluster_sizes
     )
     for name, model, params in search_space:
@@ -130,6 +138,7 @@ def build_search_space(
     cluster_range,
     spectral_affinities,
     dbscan_eps_values,
+    dbscan_min_samples_values,
     hdbscan_min_cluster_sizes
 ):
     """
@@ -154,6 +163,9 @@ def build_search_space(
 
     dbscan_eps_values : list of float
         Values of epsilon (`eps`) to use when configuring DBSCAN.
+
+    dbscan_min_samples_values : list of int
+        Values for the `min_samples` parameter in DBSCAN.
 
     hdbscan_min_cluster_sizes : list of int
         Values for `min_cluster_size` used when configuring HDBSCAN.
@@ -202,10 +214,11 @@ def build_search_space(
 
         elif algo == "DBSCAN":
             for eps in dbscan_eps_values:
-                search_space.append((
-                    "DBSCAN",
-                    DBSCAN(eps=eps, min_samples=5),
-                    {"eps": eps}
+                for min_samples in dbscan_min_samples_values:
+                    search_space.append((
+                      "DBSCAN",
+                        DBSCAN(eps=eps, min_samples=min_samples),
+                        {"eps": eps, "min_samples": min_samples}
                 ))
 
         elif algo == "OPTICS":
@@ -309,6 +322,7 @@ def benchmark_clustering_algorithms(
     cluster_range=range(2, 10),
     spectral_affinities=["rbf"],
     dbscan_eps_values=[0.3, 0.5, 0.7, 1.0],
+    dbscan_min_samples_values=[5],
     hdbscan_min_cluster_sizes=[5, 10],
     verbose=True,
     n_jobs=None
@@ -339,6 +353,9 @@ def benchmark_clustering_algorithms(
     dbscan_eps_values : list of float, optional
         List of epsilon values to evaluate for DBSCAN.
 
+    dbscan_min_samples_values : list of int, optional
+        Values for the `min_samples` parameter in DBSCAN. Default is [5].
+
     hdbscan_min_cluster_sizes : list of int, optional
         List of min_cluster_size values to try for HDBSCAN.
 
@@ -363,6 +380,7 @@ def benchmark_clustering_algorithms(
         cluster_range=cluster_range,
         spectral_affinities=spectral_affinities,
         dbscan_eps_values=dbscan_eps_values,
+        dbscan_min_samples_values=dbscan_min_samples_values,
         hdbscan_min_cluster_sizes=hdbscan_min_cluster_sizes
     )
 
