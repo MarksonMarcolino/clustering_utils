@@ -56,29 +56,38 @@ def prepare_scaled_df(
     if cols_to_scale is None:
         cols_to_scale = df.select_dtypes(include='number').columns.tolist()
 
+    # Remove cols_to_keep from cols_to_scale
     cols_to_scale = [col for col in cols_to_scale if col not in cols_to_keep]
+
+    if not cols_to_scale:
+        raise ValueError("No columns left to scale after excluding 'cols_to_keep'.")
 
     if verbose:
         print(f"[Scaling] Columns to scale: {cols_to_scale}")
         print(f"[Scaling] Columns to keep: {cols_to_keep}")
         print(f"[Scaling] Using scaler: {scaler_type}")
 
-    all_used_cols = cols_to_scale + cols_to_keep
-    df = df[all_used_cols].copy()
+    # Work only with necessary columns
+    df = df[cols_to_scale + cols_to_keep]
 
-    df_scaled = df.copy()
-
+    # Perform scaling
     if scaler_type == 'standard':
         scaler = StandardScaler()
-        df_scaled[cols_to_scale] = scaler.fit_transform(df[cols_to_scale])
+        scaled_values = scaler.fit_transform(df[cols_to_scale])
     elif scaler_type == 'minmax':
         scaler = MinMaxScaler(feature_range=minmax_range)
-        df_scaled[cols_to_scale] = scaler.fit_transform(df[cols_to_scale])
+        scaled_values = scaler.fit_transform(df[cols_to_scale])
     elif scaler_type == 'zscore':
         scaler = None
-        df_scaled[cols_to_scale] = (df[cols_to_scale] - df[cols_to_scale].mean()) / df[cols_to_scale].std()
+        scaled_values = (df[cols_to_scale] - df[cols_to_scale].mean()) / df[cols_to_scale].std()
     else:
         raise ValueError(f"Invalid scaler_type: '{scaler_type}'. Use 'standard', 'minmax', or 'zscore'.")
+
+    # Rebuild DataFrame
+    df_scaled = pd.DataFrame(scaled_values, columns=cols_to_scale, index=df.index)
+    if cols_to_keep:
+        df_scaled = pd.concat([df_scaled, df[cols_to_keep]], axis=1)
+    df_scaled = df_scaled[cols_to_scale + cols_to_keep]  # ensure column order
 
     if dropna:
         df_scaled.dropna(inplace=True)

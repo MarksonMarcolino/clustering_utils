@@ -254,45 +254,46 @@ def build_search_space(
     return search_space
 
 
+def is_distance_matrix(X):
+    """
+    Detects if X is a square, symmetric matrix (likely a precomputed distance matrix).
+    """
+    return (
+        isinstance(X, np.ndarray) and 
+        X.ndim == 2 and 
+        X.shape[0] == X.shape[1] and 
+        np.allclose(X, X.T, atol=1e-8)
+    )
+
 def evaluate_model(X, name, model, params, verbose=True):
     """
     Fits a clustering model, evaluates its performance using silhouette score, and tracks execution time.
 
-    This function attempts to fit the provided model on the input data using either `fit_predict()` 
-    or `fit()` followed by `predict()`. It computes the silhouette score for the resulting cluster 
-    labels (if more than one cluster is found), and measures how long the operation took.
-
     Parameters
     ----------
     X : pd.DataFrame or np.ndarray
-        The input feature matrix to cluster.
+        The input feature matrix or distance matrix to cluster.
 
     name : str
-        The name of the clustering algorithm (e.g., "KMeans", "DBSCAN", "HDBSCAN").
+        The name of the clustering algorithm.
 
     model : object
-        The clustering model instance. Must implement either `fit_predict()` or both `fit()` and `predict()` methods.
+        The clustering model instance.
 
     params : dict
-        Dictionary of parameters used to configure the model. Used for display and logging.
+        Model configuration.
 
-    verbose : bool, default=True
-        If True, prints progress messages, timing, and any errors encountered.
+    verbose : bool
+        Whether to print progress messages.
 
     Returns
     -------
     tuple
-        A tuple containing:
-        - algorithm name (str)
-        - parameters used (dict)
-        - silhouette score (float or None)
-        - number of clusters (int)
-        - execution time in seconds (float)
-
-        If the model fails or results in a single cluster, silhouette score is set to None or -1 respectively.
+        (algorithm name, parameters, silhouette score, number of clusters, execution time)
     """
     if verbose:
         print(f"Running {name} with {params}...")
+
     start = time.time()
     try:
         if hasattr(model, "fit_predict"):
@@ -302,11 +303,22 @@ def evaluate_model(X, name, model, params, verbose=True):
             labels = model.predict(X)
 
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-        score = silhouette_score(X, labels) if n_clusters > 1 else -1
+
+        if n_clusters > 1:
+            metric = 'precomputed' if is_distance_matrix(X) else 'euclidean'
+            try:
+                score = silhouette_score(X, labels, metric=metric)
+            except Exception as e:
+                if verbose:
+                    print(f"[Silhouette] Failed to compute score: {e}")
+                score = None
+        else:
+            score = -1
+
         duration = time.time() - start
 
         if verbose:
-            print(f"✔ Done {name} with {params} — Score: {score:.3f}, Clusters: {n_clusters}, Time: {duration:.2f}s")
+            print(f"✔ Done {name} with {params} — Score: {score}, Clusters: {n_clusters}, Time: {duration:.2f}s")
 
         return (name, params, score, n_clusters, duration)
 
