@@ -248,8 +248,8 @@ def export_cluster_summary(df, labels_column, path):
     """
     Computes and exports the mean and standard deviation of numeric features for each cluster.
 
-    This function groups the data by the cluster label column, calculates the mean and standard
-    deviation for all numeric columns (excluding the label column), and saves the results to a CSV file.
+    The output CSV will have features as rows and clusters as columns, with suffixes
+    "_mean" and "_std" to indicate the aggregated metric.
 
     Parameters
     ----------
@@ -267,12 +267,17 @@ def export_cluster_summary(df, labels_column, path):
     None
         The summary statistics are written to the specified file path.
     """
+    import pandas as pd
+
     numeric_cols = df.select_dtypes(include="number").columns.difference([labels_column])
     grouped = df.groupby(labels_column)[numeric_cols]
-    summary = pd.concat([
-        grouped.mean().add_suffix("_mean"),
-        grouped.std().add_suffix("_std")
-    ], axis=1)
+
+    # Calcula média e desvio padrão
+    means = grouped.mean().T.add_suffix("_mean")  # features como linhas
+    stds = grouped.std().T.add_suffix("_std")
+
+    # Junta tudo
+    summary = pd.concat([means, stds])
     summary.to_csv(path, index=True)
     print(f"✔ Cluster summary exported to {path}")
 
