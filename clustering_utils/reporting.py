@@ -272,11 +272,10 @@ def export_cluster_summary(df, labels_column, path):
     numeric_cols = df.select_dtypes(include="number").columns.difference([labels_column])
     grouped = df.groupby(labels_column)[numeric_cols]
 
-    # Calcula média e desvio padrão
-    means = grouped.mean().T.add_suffix("_mean")  # features como linhas
+    
+    means = grouped.mean().T.add_suffix("_mean") 
     stds = grouped.std().T.add_suffix("_std")
 
-    # Junta tudo
     summary = pd.concat([means, stds])
     summary.to_csv(path, index=True)
     print(f"✔ Cluster summary exported to {path}")

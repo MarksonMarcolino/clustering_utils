@@ -464,6 +464,52 @@ def plot_cluster_radar(X, labels, save_path, max_features=8, verbose=False):
     if verbose:
         print(f"[Radar] Saved to {save_path}")
 
+def plot_cluster_linechart(X, labels, save_path, max_features=8, verbose=False):
+    """
+    Generate a line chart to compare average cluster profiles by feature.
+
+    Parameters
+    ----------
+    X : pandas.DataFrame
+        Normalized feature data (e.g., Z-score, MinMax).
+    labels : array-like
+        Cluster labels.
+    save_path : str
+        Path to save the line chart.
+    max_features : int
+        Max number of features to show (based on highest std across clusters).
+    verbose : bool
+        If True, prints progress information.
+    """
+    if verbose:
+        print("[Linechart] Generating line chart...")
+
+    df = pd.DataFrame(X).copy()
+    df["cluster"] = labels
+    mean_profiles = df.groupby("cluster").mean()
+
+    
+    top_features = mean_profiles.std().sort_values(ascending=False).head(max_features).index
+    mean_profiles = mean_profiles[top_features]
+
+    
+    plt.figure(figsize=(12, 6))
+    for cluster in mean_profiles.index:
+        plt.plot(top_features, mean_profiles.loc[cluster], label=f"Cluster {cluster}", linewidth=2)
+
+    plt.title("Line Chart - Cluster Profiles", fontsize=14)
+    plt.xlabel("Features")
+    plt.ylabel("Mean Value (Normalized)")
+    plt.xticks(rotation=45, ha="right")
+    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.legend(title="Cluster")
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.close()
+
+    if verbose:
+        print(f"[Linechart] Saved to {save_path}")
+
 def plot_cluster_bar_compare(X, labels, key_var, save_path, top_n=10, verbose=False):
     """
     Plot a horizontal bar chart comparing clusters based on variables most correlated with a target variable.
