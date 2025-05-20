@@ -27,7 +27,8 @@ def run_full_benchmark(
     verbose=True,
     n_jobs=None,
     top_n=5,
-    return_best=False
+    return_best=False,
+    is_distance_matrix=False
 ):
     """
     Executes a full clustering benchmark pipeline using multiple algorithms and parameter configurations.
@@ -215,11 +216,12 @@ def build_search_space(
         elif algo == "DBSCAN":
             for eps in dbscan_eps_values:
                 for min_samples in dbscan_min_samples_values:
+                    metric = "precomputed" if is_distance_matrix else "euclidean"
                     search_space.append((
-                      "DBSCAN",
-                        DBSCAN(eps=eps, min_samples=min_samples),
-                        {"eps": eps, "min_samples": min_samples}
-                ))
+                        "DBSCAN",
+                        DBSCAN(eps=eps, min_samples=min_samples, metric=metric),
+                        {"eps": eps, "min_samples": min_samples, "metric": metric}
+                    ))
 
         elif algo == "OPTICS":
             search_space.append((
@@ -337,7 +339,8 @@ def benchmark_clustering_algorithms(
     dbscan_min_samples_values=[5],
     hdbscan_min_cluster_sizes=[5, 10],
     verbose=True,
-    n_jobs=None
+    n_jobs=None,
+    is_distance_matrix=False
 ):
     """
     Benchmarks multiple clustering algorithms and hyperparameter configurations on a given dataset.
