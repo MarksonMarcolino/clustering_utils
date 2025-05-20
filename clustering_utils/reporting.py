@@ -120,21 +120,15 @@ def export_top_cluster_reports(
     top_n=5,
     output_dir="cluster_reports",
     label_colname="cluster",
-    feature_names=None
+    feature_names=None,
+    dbscan_min_samples_values=[5],
+    hdbscan_min_cluster_sizes=[5],
+    spectral_affinities=["rbf"],
+    cluster_range=range(2, 20),
+    is_distance_matrix=False
 ):
     """
     Generates and exports clustering reports for the top N results from a benchmark.
-
-    For each of the top N models (based on silhouette score or any ordering in df_results), the function:
-    - Reconstructs the model from the benchmark parameters
-    - Fits it on the provided dataset X
-    - Generates and exports the following reports:
-        - Cluster counts and proportions
-        - Mean and standard deviation of each numeric feature per cluster
-        - PCA components with cluster labels
-        - Centroids (if the model supports them)
-
-    Each model's report is saved in a dedicated timestamped subfolder.
 
     Parameters
     ----------
@@ -144,26 +138,37 @@ def export_top_cluster_reports(
     df_results : pd.DataFrame
         Result DataFrame from `benchmark_clustering_algorithms` or `run_full_benchmark`.
 
-    top_n : int, optional (default=5)
+    top_n : int, optional
         Number of top models to generate reports for.
 
-    output_dir : str, optional (default="cluster_reports")
-        Root directory where the reports will be saved. Each model gets its own subfolder.
+    output_dir : str, optional
+        Root directory where the reports will be saved.
 
-    label_colname : str, optional (default="cluster")
+    label_colname : str, optional
         Name of the column to store cluster labels in exported files.
 
     feature_names : list[str], optional
         List of feature names to include in the centroid exports.
         If None, uses the columns of `X`.
 
-    Returns
-    -------
-    None
-        Saves CSV files for each top model's clustering report into the output directory.
-    """
+    dbscan_min_samples_values : list[int], optional
+        Values to test when reconstructing DBSCAN models.
 
-    from .benchmark import build_search_space  # to rebuild models
+    hdbscan_min_cluster_sizes : list[int], optional
+        Values to test when reconstructing HDBSCAN models.
+
+    spectral_affinities : list[str], optional
+        List of affinities to test for Spectral Clustering.
+
+    cluster_range : range, optional
+        Range of clusters for KMeans, Agglomerative, etc.
+
+    is_distance_matrix : bool, default=False
+        Whether `X` is a precomputed distance matrix.
+    """
+    from datetime import datetime
+    import os
+    from .benchmark import build_search_space
     from .reporting import (
         export_cluster_summary,
         export_cluster_counts,
@@ -171,7 +176,6 @@ def export_top_cluster_reports(
         export_cluster_centroids
     )
 
-    # Create timestamped folder
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir = os.path.join(output_dir, f"top_{top_n}_{timestamp}")
     os.makedirs(output_dir, exist_ok=True)
@@ -182,14 +186,16 @@ def export_top_cluster_reports(
 
         print(f" Generating report for Top {i+1}: {algo} with {params}")
 
-        # Rebuild model
         search_space = build_search_space(
             algorithms=[algo],
-            cluster_range=range(2, 20),  # wide enough to match anything
-            spectral_affinities=[params.get("affinity", "rbf")],
+            cluster_range=cluster_range,
+            spectral_affinities=spectral_affinities,
             dbscan_eps_values=[params.get("eps", 0.5)],
-            hdbscan_min_cluster_sizes=[params.get("min_cluster_size", 5)]
+            dbscan_min_samples_values=[params.get("min_samples", 5)],
+            hdbscan_min_cluster_sizes=[params.get("min_cluster_size", 5)],
+            is_distance_matrix=is_distance_matrix
         )
+
         model = None
         for name, m, p in search_space:
             if name == algo and p == params:
@@ -199,28 +205,24 @@ def export_top_cluster_reports(
             print(f"⚠ Could not match model for: {algo} {params}")
             continue
 
-        # Fit and get labels
+        # Fit model
         if hasattr(model, "fit_predict"):
             labels = model.fit_predict(X)
         else:
             model.fit(X)
             labels = model.predict(X)
 
-        # Prepare DataFrame with labels
-        df_with_labels = X.copy()
+        df_with_labels = pd.DataFrame(X).copy()
         df_with_labels[label_colname] = labels
 
-        # Format parameters into a readable string
         param_str = "_".join([f"{k}={v}" for k, v in params.items()]) if params else "default"
         subfolder_name = f"{i+1}_{algo}_{param_str}"
         base_path = os.path.join(output_dir, subfolder_name)
         os.makedirs(base_path, exist_ok=True)
 
-        # Ensure feature_names is set
-        if feature_names is None:
+        if feature_names is None and isinstance(X, pd.DataFrame):
             feature_names = X.columns
 
-        # Export all reports
         export_cluster_counts(df_with_labels, label_colname, os.path.join(base_path, "counts.csv"))
         export_cluster_summary(df_with_labels, label_colname, os.path.join(base_path, "summary.csv"))
         export_pca_components(df_with_labels, label_colname, os.path.join(base_path, "pca.csv"))
