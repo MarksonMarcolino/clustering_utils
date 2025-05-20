@@ -119,6 +119,7 @@ def export_top_cluster_reports(
     df_results,
     top_n=5,
     output_dir="cluster_reports",
+    X_raw=None,
     label_colname="cluster",
     feature_names=None,
     dbscan_min_samples_values=[5],
@@ -132,42 +133,46 @@ def export_top_cluster_reports(
 
     Parameters
     ----------
-    X : pd.DataFrame
-        Scaled dataset to be clustered.
+    X : array-like
+        Data used to refit the models (can be feature matrix or precomputed distance matrix).
 
     df_results : pd.DataFrame
-        Result DataFrame from `benchmark_clustering_algorithms` or `run_full_benchmark`.
+        Output from run_full_benchmark or benchmark_clustering_algorithms.
 
     top_n : int, optional
-        Number of top models to generate reports for.
+        Number of top models to report on.
 
     output_dir : str, optional
-        Root directory where the reports will be saved.
+        Root directory where reports will be saved.
+
+    X_raw : pd.DataFrame, optional
+        DataFrame with named columns for exporting summary, counts, etc.
+        If None, a DataFrame will be created from X using feature_names.
 
     label_colname : str, optional
-        Name of the column to store cluster labels in exported files.
+        Name for the column storing cluster labels.
 
     feature_names : list[str], optional
-        List of feature names to include in the centroid exports.
-        If None, uses the columns of `X`.
+        Used when X is a NumPy array. If None and X_raw is given, X_raw.columns will be used.
 
     dbscan_min_samples_values : list[int], optional
-        Values to test when reconstructing DBSCAN models.
+        Values for DBSCAN re-instantiation.
 
     hdbscan_min_cluster_sizes : list[int], optional
-        Values to test when reconstructing HDBSCAN models.
+        Values for HDBSCAN re-instantiation.
 
     spectral_affinities : list[str], optional
-        List of affinities to test for Spectral Clustering.
+        Values for SpectralClustering.
 
     cluster_range : range, optional
-        Range of clusters for KMeans, Agglomerative, etc.
+        Range of cluster values for rebuild.
 
-    is_distance_matrix : bool, default=False
-        Whether `X` is a precomputed distance matrix.
+    is_distance_matrix : bool, optional
+        Whether X is a precomputed distance matrix.
     """
     from datetime import datetime
     import os
+    import pandas as pd
     from .benchmark import build_search_space
     from .reporting import (
         export_cluster_summary,
@@ -186,6 +191,7 @@ def export_top_cluster_reports(
 
         print(f" Generating report for Top {i+1}: {algo} with {params}")
 
+        # Rebuild model
         search_space = build_search_space(
             algorithms=[algo],
             cluster_range=cluster_range,
@@ -205,30 +211,38 @@ def export_top_cluster_reports(
             print(f"⚠ Could not match model for: {algo} {params}")
             continue
 
-        # Fit model
+        # Fit and get labels
         if hasattr(model, "fit_predict"):
             labels = model.fit_predict(X)
         else:
             model.fit(X)
             labels = model.predict(X)
 
-        df_with_labels = pd.DataFrame(X).copy()
+        # Determine data to use for reporting
+        if X_raw is not None:
+            df_with_labels = X_raw.copy()
+        else:
+            df_with_labels = pd.DataFrame(X, columns=feature_names if feature_names else None)
+
         df_with_labels[label_colname] = labels
 
+        # Format parameters
         param_str = "_".join([f"{k}={v}" for k, v in params.items()]) if params else "default"
         subfolder_name = f"{i+1}_{algo}_{param_str}"
         base_path = os.path.join(output_dir, subfolder_name)
         os.makedirs(base_path, exist_ok=True)
 
-        if feature_names is None and isinstance(X, pd.DataFrame):
-            feature_names = X.columns
+        # Determine final feature names
+        if feature_names is None:
+            feature_names = df_with_labels.drop(columns=[label_colname], errors="ignore").columns
 
+        # Export reports
         export_cluster_counts(df_with_labels, label_colname, os.path.join(base_path, "counts.csv"))
         export_cluster_summary(df_with_labels, label_colname, os.path.join(base_path, "summary.csv"))
         export_pca_components(df_with_labels, label_colname, os.path.join(base_path, "pca.csv"))
         export_cluster_centroids(model, feature_names, os.path.join(base_path, "centroids.csv"))
 
-    print(f"\n All reports saved to: {output_dir}")
+    print(f"\n✅ All reports saved to: {output_dir}")
 
 def export_cluster_summary(df, labels_column, path):
     """
