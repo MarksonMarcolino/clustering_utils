@@ -11,6 +11,38 @@ import umap.umap_ as umap
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from .benchmark import build_search_space
 
+def sanitize_X_for_visualization(X, verbose=False):
+    """
+    Attempts to convert all columns to numeric. Drops columns that cannot be converted.
+
+    Parameters
+    ----------
+    X : pd.DataFrame
+        Input dataframe with possible mixed types.
+
+    verbose : bool, default=False
+        If True, prints which columns were dropped.
+
+    Returns
+    -------
+    pd.DataFrame
+        A sanitized dataframe with only numeric columns.
+    """
+    if not isinstance(X, pd.DataFrame):
+        return X  # return as is if it's already a numpy array or not a DataFrame
+
+    # Try to convert all columns to numeric where possible
+    X_converted = X.copy()
+    for col in X_converted.columns:
+        X_converted[col] = pd.to_numeric(X_converted[col], errors="coerce")
+
+    # Drop columns that are entirely NaN after conversion
+    non_numeric_cols = X_converted.columns[X_converted.isna().all()].tolist()
+    if non_numeric_cols and verbose:
+        print(f"[Sanitize] Dropping non-numeric columns after conversion: {non_numeric_cols}")
+
+    return X_converted.drop(columns=non_numeric_cols)
+
 def plot_pca_projection(X, labels, save_path, verbose=False):
     """
     Plot a 2D PCA projection of high-dimensional data, colored by cluster labels.
@@ -526,6 +558,7 @@ def generate_all_cluster_plots(
     None
     """
     os.makedirs(save_dir, exist_ok=True)
+    X = sanitize_X_for_visualization(X, verbose=verbose)
 
     if verbose:
         print(f"[Viz] Generating plots for {model_name} with params {params} -> {save_dir}")
