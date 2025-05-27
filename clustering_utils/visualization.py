@@ -630,7 +630,7 @@ def generate_all_cluster_plots(
     # New visualizations
     plot_cluster_radar(X, labels, os.path.join(save_dir, "radar_chart.png"), max_features=radar_max_features, verbose=verbose)
     plot_cluster_bar_compare(X, labels, key_var=bar_compare_key_var, save_path=os.path.join(save_dir, "bar_compare.png"), top_n=bar_top_n, verbose=verbose)
-
+    plot_cluster_linechart(X, labels, os.path.join(save_dir, "line_chart.png"), max_features=radar_max_features, verbose=verbose)
 def generate_top_cluster_visuals(
     X,
     df_results,
