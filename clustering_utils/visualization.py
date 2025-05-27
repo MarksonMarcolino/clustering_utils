@@ -516,8 +516,9 @@ def plot_cluster_bar_compare(
     verbose=False
 ):
     """
-    Plot a horizontal bar chart comparing clusters based on feature means,
-    optionally sorted by correlation with a target variable.
+    Plot a horizontal bar chart comparing clusters based on feature means.
+
+    If `top_n` is None, shows all available features (excluding cluster + key_var).
 
     Parameters
     ----------
@@ -526,39 +527,39 @@ def plot_cluster_bar_compare(
     labels : array-like
         Cluster labels.
     key_var : str
-        Variable to use for correlation (only for ordering).
+        Variable to use for ordering (ignored if top_n=None).
     save_path : str
         Path to save the bar chart.
     top_n : int or None
-        Number of top correlated features to display. If None, uses all.
+        Number of top features to show. If None, shows all.
     verbose : bool
         If True, prints progress.
-
-    Returns
-    -------
-    None
     """
     if verbose:
-        print(f"[Bar] Comparing clusters using correlation with '{key_var}'...")
+        print(f"[Bar] Comparing clusters using '{key_var}'...")
 
     df = pd.DataFrame(X).copy()
-    if key_var not in df.columns:
-        raise ValueError(f"'{key_var}' is not in the dataframe columns.")
-
     df["cluster"] = labels
 
     
-    correlations = df.corr()[key_var].drop("cluster").abs().sort_values(ascending=False)
+    if key_var not in df.columns:
+        raise ValueError(f"'{key_var}' is not in the dataframe columns.")
 
-    if top_n is not None:
-        top_features = correlations.head(top_n).index
+    
+    if top_n is None:
+        top_features = df.drop(columns=["cluster", key_var], errors="ignore").columns
     else:
-        top_features = correlations.index 
+        correlations = (
+            df.corr(numeric_only=True)[key_var]
+            .drop("cluster", errors="ignore")
+            .abs()
+            .sort_values(ascending=False)
+        )
+        top_features = correlations.head(top_n).index
 
     means = df.groupby("cluster")[top_features].mean().T
-
     num_features = len(top_features)
-    fig_height = max(6, num_features * 0.4) 
+    fig_height = max(6, num_features * 0.4)
 
     fig, ax = plt.subplots(figsize=(12, fig_height))
     bars = means.plot(kind="barh", ax=ax, width=0.8)
@@ -568,11 +569,11 @@ def plot_cluster_bar_compare(
     for container in ax.containers:
         ax.bar_label(container, fmt="%.2f", label_type="edge", padding=3)
 
-    ax.set_title(f"Cluster Comparison Based on Correlation with '{key_var}'")
+    ax.set_title(f"Cluster Comparison Based on '{key_var}'" if top_n else "Cluster Comparison Across All Features")
     ax.set_xlabel("Cluster Mean")
     ax.legend(title="Cluster", bbox_to_anchor=(1.02, 1), loc="upper left", borderaxespad=0)
-
     ax.tick_params(axis="y", labelsize=9)
+
     plt.tight_layout()
     plt.savefig(save_path)
     plt.close()
