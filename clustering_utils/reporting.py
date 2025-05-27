@@ -222,7 +222,7 @@ def export_top_cluster_reports(
         if X_raw is not None:
             df_with_labels = X_raw.copy()
         else:
-            df_with_labels = pd.DataFrame(X, columns=feature_names if feature_names else None)
+            df_with_labels = pd.DataFrame(X, columns=list(feature_names) if feature_names else None)
 
         df_with_labels[label_colname] = labels
 
@@ -234,7 +234,7 @@ def export_top_cluster_reports(
 
         # Determine final feature names
         if feature_names is None:
-            feature_names = df_with_labels.drop(columns=[label_colname], errors="ignore").columns
+            feature_names = list(df_with_labels.drop(columns=[label_colname], errors="ignore").columns)
 
         # Export reports
         export_cluster_counts(df_with_labels, label_colname, os.path.join(base_path, "counts.csv"))
