@@ -559,7 +559,7 @@ def plot_cluster_bar_compare(
 
     means = df.groupby("cluster")[top_features].mean().T
     num_features = len(top_features)
-    fig_height = max(6, num_features * 0.4)
+    fig_height = max(6, num_features * 0.6)
 
     fig, ax = plt.subplots(figsize=(12, fig_height))
     bars = means.plot(kind="barh", ax=ax, width=0.8)
@@ -654,7 +654,7 @@ def generate_top_cluster_visuals(
     tsne_perplexities=[30],
     radar_max_features=8,
     bar_compare_key_var="media_freq_media_valida_pct",
-    bar_top_n=10,
+    bar_top_n=None,
     verbose=False
 ):
     """
