@@ -510,9 +510,14 @@ def plot_cluster_linechart(X, labels, save_path, max_features=8, verbose=False):
     if verbose:
         print(f"[Linechart] Saved to {save_path}")
 
-def plot_cluster_bar_compare(X, labels, key_var, save_path, top_n=10, verbose=False):
+def plot_cluster_bar_compare(
+    X, labels, key_var, save_path,
+    top_n=None,
+    verbose=False
+):
     """
-    Plot a horizontal bar chart comparing clusters based on variables most correlated with a target variable.
+    Plot a horizontal bar chart comparing clusters based on feature means,
+    optionally sorted by correlation with a target variable.
 
     Parameters
     ----------
@@ -521,44 +526,53 @@ def plot_cluster_bar_compare(X, labels, key_var, save_path, top_n=10, verbose=Fa
     labels : array-like
         Cluster labels.
     key_var : str
-        Name of the variable to use for correlation-based comparison.
+        Variable to use for correlation (only for ordering).
     save_path : str
         Path to save the bar chart.
-    top_n : int
-        Number of most correlated variables to display.
+    top_n : int or None
+        Number of top correlated features to display. If None, uses all.
     verbose : bool
-        If True, prints progress information.
+        If True, prints progress.
 
     Returns
     -------
     None
     """
     if verbose:
-        print(f"[Bar] Comparing clusters based on '{key_var}' correlations...")
+        print(f"[Bar] Comparing clusters using correlation with '{key_var}'...")
 
     df = pd.DataFrame(X).copy()
     if key_var not in df.columns:
         raise ValueError(f"'{key_var}' is not in the dataframe columns.")
 
     df["cluster"] = labels
+
+    
     correlations = df.corr()[key_var].drop("cluster").abs().sort_values(ascending=False)
-    top_features = correlations.head(top_n).index
+
+    if top_n is not None:
+        top_features = correlations.head(top_n).index
+    else:
+        top_features = correlations.index 
 
     means = df.groupby("cluster")[top_features].mean().T
 
-    fig, ax = plt.subplots(figsize=(12, top_n * 0.6 + 2))
+    num_features = len(top_features)
+    fig_height = max(6, num_features * 0.4) 
+
+    fig, ax = plt.subplots(figsize=(12, fig_height))
     bars = means.plot(kind="barh", ax=ax, width=0.8)
 
-    # Invert Y-axis to show the most correlated features at the top
     ax.invert_yaxis()
 
-    # Add numerical labels to each bar
     for container in ax.containers:
         ax.bar_label(container, fmt="%.2f", label_type="edge", padding=3)
 
-    ax.set_title(f"Cluster Comparison Based on Top Correlated Features with '{key_var}'")
+    ax.set_title(f"Cluster Comparison Based on Correlation with '{key_var}'")
     ax.set_xlabel("Cluster Mean")
     ax.legend(title="Cluster", bbox_to_anchor=(1.02, 1), loc="upper left", borderaxespad=0)
+
+    ax.tick_params(axis="y", labelsize=9)
     plt.tight_layout()
     plt.savefig(save_path)
     plt.close()
