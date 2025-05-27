@@ -681,6 +681,7 @@ def generate_top_cluster_visuals(
             cluster_range=range(2, 20),
             spectral_affinities=[model_params.get("affinity", "rbf")],
             dbscan_eps_values=[model_params.get("eps", 0.5)],
+            dbscan_min_samples_values=[model_params.get("min_samples", 5)],
             hdbscan_min_cluster_sizes=[model_params.get("min_cluster_size", 5)]
         )
         model = next((m for name, m, p in search_space if name == model_name and p == model_params), None)
