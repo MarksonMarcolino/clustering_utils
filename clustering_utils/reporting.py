@@ -108,7 +108,7 @@ def export_single_cluster_report(
     export_pca_components(df_with_labels, label_colname, os.path.join(base_path, "pca.csv"))
 
     if feature_names is None:
-        feature_names = X.columns
+        feature_names = list(X.columns)
 
     export_cluster_centroids(model, feature_names, os.path.join(base_path, "centroids.csv"))
 
